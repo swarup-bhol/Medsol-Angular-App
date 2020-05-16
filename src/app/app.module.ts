@@ -12,6 +12,7 @@ import { ProfilePageComponent } from './Medsol-Profile/profile-page/profile-page
 import { EditProfileComponent } from './Medsol-Profile/edit-profile/edit-profile.component';
 import { PageNotFoundComponent } from './Medsol-Common/page-not-found/page-not-found.component';
 import { ConfirmDialogComponent } from './Medsol-Common/confirm-dialog/confirm-dialog.component';
+import { DashBoardComponent } from './Medsol-Dashboard/dash-board/dash-board.component';
 
 @NgModule({
   declarations: [
@@ -24,7 +25,8 @@ import { ConfirmDialogComponent } from './Medsol-Common/confirm-dialog/confirm-d
     ProfilePageComponent,
     EditProfileComponent,
     PageNotFoundComponent,
-    ConfirmDialogComponent
+    ConfirmDialogComponent,
+    DashBoardComponent
   ],
   imports: [
     BrowserModule,
