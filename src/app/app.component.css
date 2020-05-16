@@ -1,8 +1,19 @@
-.header-div{
-   background-color:#31454e;
-   height: 46px;
+.header-div {
+    background-color: #223640;
+    height: 55px;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 1;
 }
-.header-title{
+
+.header-title {
     color: white;
-   font-size: 24px;
+    font-size: 24px;
+    margin: 0;
+    position: absolute;
+    top: 50%;
+    -ms-transform: translateY(-50%);
+    transform: translateY(-50%);
 }
