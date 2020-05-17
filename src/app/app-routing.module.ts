@@ -5,12 +5,14 @@ import { LoginComponent } from './Medsol-Form/login/login.component';
 import { DashBoardComponent } from './Medsol-Dashboard/dash-board/dash-board.component';
 import { RegisterComponent } from './Medsol-Form/register/register.component';
 import { ForgotPasswordComponent } from './Medsol-Form/forgot-password/forgot-password.component';
+import { PeopleListComponent } from './Medsol-Dashboard/people-list/people-list.component';
 
 
 const routes: Routes = [
   { path: "login", component: LoginComponent },
   { path: "signup", component: RegisterComponent },
   { path: 'forgot-password', component: ForgotPasswordComponent },
+  { path: "peoples", component: PeopleListComponent },
   { path: "", component: DashBoardComponent },
   { path: '404', component: PageNotFoundComponent },
   { path: '**', redirectTo: '/404' }
