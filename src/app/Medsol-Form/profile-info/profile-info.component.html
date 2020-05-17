@@ -1,1 +1,197 @@
-<p>profile-info works!</p>
+<div class="py-4">
+   <div class="container">
+      <div class="row">
+         <!-- Main Content -->
+         <!-- Profile Picture -->
+         <main class="col-md-8">
+            <div class="border rounded bg-white mb-3">
+               <div class="box-title border-bottom p-3">
+                  <h6 class="m-0">Basic Info</h6>
+                  <p class="mb-0 mt-0 small"></p>
+               </div>
+               <div class="box-body p-3">
+                  <form>
+                     <div class="row">
+                        <!-- Input -->
+                        <div class="col-sm-6 mb-2">
+                           <!-- <div class="js-form-message"> -->
+                              <label id="nameLabel" class="form-label">
+                                 Full Name
+                                 <span class="text-danger">*</span>
+                              </label>
+                              <div class="form-group">
+                                 <input type="text" class="form-control">
+                              </div>
+                           <!-- </div> -->
+                        </div>
+                        <!-- End Input -->
+                        <!-- Input -->
+                        <div class="col-sm-6 mb-2">
+                           <!-- <div class="js-form-message"> -->
+                              <label id="emailLabel" class="form-label">
+                                 Email address
+                                 <span class="text-danger">*</span>
+                              </label>
+                              <div class="form-group">
+                                 <input type="email" class="form-control">
+                              </div>
+                           <!-- </div> -->
+                        </div>
+                     </div>
+                     <div class="row">
+                        <!-- Input -->
+                        <div class="col-sm-6 mb-2">
+                           <!-- <div class="js-form-message"> -->
+                              <label id="phoneNumberLabel" class="form-label">
+                                 Phone number
+                                 <span class="text-danger">*</span>
+                              </label>
+                              <div class="form-group">
+                                 <input class="form-control" type="tel">
+                              </div>
+                           <!-- </div> -->
+                        </div>
+                        <!-- End Input -->
+                        <!-- Input -->
+                        <div class="col-sm-6 mb-2">
+                           <!-- <div class="js-form-message"> -->
+                              <label id="dob" class="custom-label">
+                                 Date of Birth
+                                 <span class="text-danger">*</span>
+                              </label>
+                              <div class="form-group">
+                                 <input type="date" class="form-control">
+                              </div>
+                           <!-- </div> -->
+                        </div>
+                        <!-- End Input -->
+                     </div>
+                     <!-- End Input -->
+                     <div class="row">
+                        <!-- Input -->
+                        <div class="col-sm-6 mb-2">
+                           <!-- <div class="js-form-message"> -->
+                              <label id="professionLabel" class="form-label">
+                                 Select Profession
+                                 <span class="text-danger">*</span>
+                              </label>
+                              <div class="form-group">
+                                 <select class="form-control">
+                                    <option>Select</option>
+                                 </select>
+                              </div>
+                           <!-- </div> -->
+                        </div>
+                        <!-- End Input -->
+                        <!-- Input -->
+                        <div class="col-sm-6 mb-2">
+                           <!-- <div class="js-form-message"> -->
+                              <label id="gradeLabel" class="form-label">
+                                 Grade
+                                 <span class="text-danger">*</span>
+                              </label>
+                              <div class="form-group">
+                                 <select class="form-control">
+                                    <option>Select</option>
+                                 </select>
+                              </div>
+                           <!-- </div> -->
+                        </div>
+                     </div>
+                     <div class="row">
+                        <!-- Input -->
+                        <div class="col-sm-6 mb-2">
+                           <!-- <div class="js-form-message"> -->
+                              <label id="instituteLabel" class="form-label">
+                                 Institute
+                                 <span class="text-danger">*</span>
+                              </label>
+                              <div class="form-group">
+                                 <input type="text" class="form-control">
+                              </div>
+                           <!-- </div> -->
+                        </div>
+                        <!-- End Input -->
+                     </div>
+
+                     <div class="row">
+                        <!-- Input -->
+                        <div class="col-sm-6 mb-2">
+                           <!-- <div class="js-form-message"> -->
+                              <label id="specializationLabel" class="form-label">
+                                 Specialization
+                                 <span class="text-danger">*</span>
+                              </label>
+                              <div class="form-group">
+                                 <select class="form-control">
+                                    <option>Select</option>
+                                 </select>
+                              </div>
+                           <!-- </div> -->
+                        </div>
+                        <!-- End Input -->
+                        <!-- Input -->
+                        <div class="col-sm-6 mb-2">
+                           <!-- <div class="js-form-message"> -->
+                              <label id="subLabel" class="form-label">
+                                 Sub-specialization
+                                 <span class="text-danger">*</span>
+                              </label>
+                              <div class="form-group">
+                                 <select class="form-control">
+                                    <option>Select</option>
+                                 </select>
+                              </div>
+                           <!-- </div> -->
+                        </div>
+                        <!-- End Input -->
+                     </div>
+                  </form>
+               </div>
+            </div>
+            <div class="mb-3 text-right">
+               <a class="font-weight-bold btn btn-link rounded p-3"> &nbsp;&nbsp;&nbsp;&nbsp;
+                  Cancel &nbsp;&nbsp;&nbsp;&nbsp; </a>
+               <a class="font-weight-bold btn btn-primary rounded p-3"> &nbsp;&nbsp;&nbsp;&nbsp;
+                  Sava Chenges &nbsp;&nbsp;&nbsp;&nbsp; </a>
+            </div>
+         </main>
+         <aside class="col-md-4">
+            <div class="mb-3 border rounded bg-white profile-box text-center w-10">
+               <div class="box-title border-bottom p-3">
+                  <h6 class="m-0">Upload Profile Picture</h6>
+               </div>
+               <div class="p-4 d-flex align-items-center">
+                  <img src="./../../../assets/p10.png" class="img-fluid rounded-circle" alt="">
+                  <div class="p-4">
+                     <label data-toggle="tooltip" data-placement="top" data-original-title="Upload New Picture"
+                        class="btn btn-info m-0" for="fileAttachmentBtn">
+                        <i class="fa fa-picture-o" aria-hidden="true"></i>
+                        <input id="fileAttachmentBtn" name="file-attachment" type="file" class="d-none">
+                     </label>
+                     <button data-toggle="tooltip" data-placement="top" data-original-title="Delete" type="submit"
+                        class="btn btn-danger"><i class="fa fa-trash" aria-hidden="true"></i></button>
+                  </div>
+               </div>
+            </div>
+            <!-- Document Upload -->
+            <div class="mb-3 border rounded bg-white profile-box text-center w-10">
+               <div class="box-title border-bottom p-3">
+                  <h6 class="m-0">Upload Document</h6>
+               </div>
+               <div class="p-4 d-flex align-items-center">
+                  <img src="./../../../assets/pic.png" class="img-fluid rounded-circle" alt="">
+                  <div class="p-4">
+                     <label data-toggle="tooltip" data-placement="top" class="btn btn-info m-0" for="fileAttachmentBtn">
+                        <i class="fa fa-picture-o" aria-hidden="true"></i>
+                        <input id="fileAttachmentBtn" name="file-attachment" type="file" class="d-none">
+                     </label>
+                     <button data-toggle="tooltip" data-placement="top" data-original-title="Delete" type="submit"
+                        class="btn btn-danger"><i class="fa fa-trash" aria-hidden="true"></i></button>
+                  </div>
+               </div>
+            </div>
+         </aside>
+      </div>
+   </div>
+</div>

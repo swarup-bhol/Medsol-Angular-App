@@ -1,8 +1,8 @@
-<div class="bg-white">
+<div class="bg-white   py-4">
     <div class="container">
         <div class="row justify-content-center align-items-center d-flex vh-100">
             <div class="col-md-4 mx-auto">
-                <div class="osahan-login py-4">
+                <div class="osahan-login">
                     <div class="text-center mb-4">
                         <a href=""><img src="" alt=""></a>
                         <h5 class="font-weight-bold mt-3">Join Medsol</h5>
@@ -62,8 +62,8 @@
                             </div>
                         </div>
                         <div class="py-3 d-flex align-item-center">
-                            <a href="">Forgot password?</a>
-                            <span class="ml-auto"> Already on Osahanin? <a class="font-weight-bold" href="">Sign
+                            <a href [routerLink]="['/forgot-password']">Forgot password?</a>
+                            <span class="ml-auto"> Already on Osahanin? <a class="font-weight-bold" [routerLink]="['/login']">Sign
                                     in</a></span>
                         </div>
                     </form>
