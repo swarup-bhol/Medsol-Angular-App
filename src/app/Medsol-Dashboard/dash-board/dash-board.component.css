@@ -14,87 +14,13 @@ img {
     font-size: 13px;
     font-family: 'Ubuntu', sans-serif;
 }
-
-
-
-
-
-
-
-/* .outer-dashboard-div{
-    border-top: solid 1px silver;
-    margin-top: 55px;
-    background-color: #edf2f4;
+.overlap-rounded-circle .rounded-circle {
+    width: 22px;
+    height: 22px;
+    border: 2px solid #fff;
+    margin: 0 0 0 -9px;
 }
-.inner-dshboard-div{
-   margin-left: 8%;
-   margin-right: 8%;
+.job-item-header .img-fluid, .job-item-2 .img-fluid {
+    width: 40px;
+    height: 40px;
 }
-
-
-
-
-.dashboard-profile-card{
-    
-    margin-top:10%;
-    border: 1px solid edf2f4;
-    height: 350px; 
-    background-color: #fff;
-    margin-right: -16px;
-    border-radius:1.5% ;
-    
-}
-.dashboard-follow-card{
-    margin-top:10%;
-    border: 1px solid edf2f4;
-    height: 350px; 
-    background-color: #fff;
-    margin-left: -16px;
-    border-radius:1.5% ;
-}
-.dashboard-details-card{
-    margin-top: 5%;
-    border: 1px solid white;
-    height: 270px; 
-    background-color: #fff;
-    margin-right: -16px;
-    border-radius:1.5% ;
-}
-.details-card{
-    margin-top: 5%;
-    border: 1px solid white;
-    height: 270px; 
-    background-color: #fff;
-    margin-left: -16px;
-    border-radius:1.5% ;
-}
-
-
-
-.create-post-div{
-    margin-top: 4.7%;
-    border: 1px solid white;
-    height: 200px; 
-    background-color: #fff;
-    border-radius:1.5% ;
-}
-.activity-post-div{
-    margin-top: 4%;
-    border: 1px solid white;
-    height: 230px; 
-    background-color: #fff;
-    border-radius:1.5% ;
-}
-.post-div{
-    margin-top: 4%;
-    border: 1px solid white;
-    min-height: 350px; 
-    background-color: #fff;
-    border-radius:1.5% ;
-}
-.dashboard-news-feed-div{
-
-}
-.dashboard-sugg-people-div{
-
-} */

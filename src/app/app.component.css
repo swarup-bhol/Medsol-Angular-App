@@ -21,29 +21,53 @@ img {
 .osahan-nav-top .navbar-search .form-control {
     background: #132028;
 }
-/* body {
-    background: #edf2f6;
-    font-size: 13px;
-    font-family: 'Ubuntu', sans-serif;
-} */
-
-
-/* .header-div {
-    background-color: #223640;
-    height: 55px;
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    z-index: 1;
+.osahan-nav-top .navbar-search .btn {
+    background: #132028 !important;
+    color: #74828e;
+}
+.osahan-nav-top .osahan-list-dropdown .nav-link .badge {
+    position: absolute;
+    border-radius: 50px;
+    min-width: 15px;
+    height: 15px;
+    font-size: 9px;
+    padding: 0px;
+    right: 1px;
+    line-height: 15px;
+    top: 11px;
 }
 
-.header-title {
-    color: white;
-    font-size: 24px;
-    margin: 0;
-    position: absolute;
-    top: 50%;
-    -ms-transform: translateY(-50%);
-    transform: translateY(-50%);
+.badge-info {
+    color: #1e2022;
+    background-color: #00dffc;
+}
+.badge-info {
+    color: #fff;
+    background-color: #17a2b8;
+}
+.badge {
+    display: inline-block;
+    padding: .25em .4em;
+    font-size: 75%;
+    font-weight: 700;
+    line-height: 1;
+    text-align: center;
+    white-space: nowrap;
+    vertical-align: baseline;
+    border-radius: .25rem;
+    transition: color .15s ease-in-out,background-color .15s ease-in-out,border-color .15s ease-in-out,box-shadow .15s ease-in-out;
+}
+.osahan-nav-top .osahan-list-dropdown .nav-link i {
+    font-size: 16px;
+}
+/* [class^="feather-"], [class*=" feather-"] {
+    font-family: 'feather' !important;
+    speak: none;
+    font-style: normal;
+    font-weight: normal;
+    font-variant: normal;
+    text-transform: none;
+    line-height: 1;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
 } */

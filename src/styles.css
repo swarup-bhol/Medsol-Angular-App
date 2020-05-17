@@ -1,1 +1,6 @@
 /* You can add global styles to this file, and also import other style files */
+body {
+    background: #edf2f6;
+    font-size: 13px;
+    font-family: 'Ubuntu', sans-serif;
+}
