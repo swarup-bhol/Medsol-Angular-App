@@ -5,6 +5,8 @@ import { LoginComponent } from './Medsol-Form/login/login.component';
 import { DashBoardComponent } from './Medsol-Dashboard/dash-board/dash-board.component';
 import { RegisterComponent } from './Medsol-Form/register/register.component';
 import { ForgotPasswordComponent } from './Medsol-Form/forgot-password/forgot-password.component';
+import { ProfilePageComponent } from './Medsol-Profile/profile-page/profile-page.component';
+import { EditProfileComponent } from './Medsol-Profile/edit-profile/edit-profile.component';
 import { PeopleListComponent } from './Medsol-Dashboard/people-list/people-list.component';
 import { ProfileInfoComponent } from './Medsol-Form/profile-info/profile-info.component';
 
@@ -12,7 +14,10 @@ import { ProfileInfoComponent } from './Medsol-Form/profile-info/profile-info.co
 const routes: Routes = [
   { path: "login", component: LoginComponent },
   { path: "signup", component: RegisterComponent },
+  { path: "profile", component: ProfilePageComponent },
+  {path: "edit-profile",component:EditProfileComponent},
   { path: 'forgot-password', component: ForgotPasswordComponent },
+  { path: "", component: DashBoardComponent }, 
   { path: "peoples", component: PeopleListComponent },
   {path:"profile-info",component:ProfileInfoComponent},
   { path: "", component: DashBoardComponent },
