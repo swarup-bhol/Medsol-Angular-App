@@ -1,0 +1,205 @@
+<div class="py-4">
+    <div class="container">
+        <div class="row">
+            <!-- Main Content -->
+            <main class="col col-xl-9 order-xl-2 col-lg-12 order-lg-1 col-md-12 col-sm-12 col-12">
+                <div class="box shadow-sm border rounded bg-white mb-3 osahan-share-post">
+                    <h5 class="pl-3 pt-3 pr-3 border-bottom mb-0 pb-3">More suggestions for you</h5>
+                    <ul class="nav border-bottom osahan-line-tab" id="myTab" role="tablist">
+                        <li class="nav-item">
+                            <a class="nav-link active" id="home-tab" data-toggle="tab"
+                                href="#home" role="tab"
+                                aria-controls="home" aria-selected="true">People</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" id="profile-tab" data-toggle="tab"
+                                href="#profile"
+                                role="tab" aria-controls="profile" aria-selected="false">Groups</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" id="contact-tab" data-toggle="tab"
+                                href="#contact"
+                                role="tab" aria-controls="contact" aria-selected="false">Followers</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" id="type-tab" data-toggle="tab"
+                                href="#type" role="tab"
+                                aria-controls="type" aria-selected="false">Hashtags</a>
+                        </li>
+                    </ul>
+                    <div class="tab-content" id="myTabContent">
+                        <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
+                            <div class="p-3">
+                                <div class="row">
+                                    <div class="col-md-4" *ngFor = "let i of peopleList">
+                                        <a href="">
+                                            <div class="border network-item rounded mb-3">
+                                                <div class="p-3 d-flex align-items-center network-item-header">
+                                                    <div class="dropdown-list-image mr-3">
+                                                        <img class="rounded-circle" src="./../../../assets/p10.png" alt="">
+                                                    </div>
+                                                    <div class="font-weight-bold">
+                                                        <h6 class="font-weight-bold text-dark mb-0">Sophia Lee</h6>
+                                                        <div class="small text-black-50">Photographer at Photography
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div
+                                                    class="d-flex align-items-center p-3 border-top border-bottom network-item-body">
+                                                    <div class="overlap-rounded-circle">
+                                                        <img class="rounded-circle shadow-sm" data-toggle="tooltip"
+                                                            data-placement="top" title="Sophia Lee"
+                                                            src="./../../../assets/p10.png" alt="">
+                                                        <img class="rounded-circle shadow-sm" data-toggle="tooltip"
+                                                            data-placement="top" title="John Doe"
+                                                            src="./../../../assets/p10.png" alt="">
+                                                        <img class="rounded-circle shadow-sm" data-toggle="tooltip"
+                                                            data-placement="top" title="Julia Cox"
+                                                            src="./../../../assets/p10.png" alt="">
+                                                        <img class="rounded-circle shadow-sm" data-toggle="tooltip"
+                                                            data-placement="top" title="Robert Cook"
+                                                            src="./../../../assets/p10.png" alt="">
+                                                        <img class="rounded-circle shadow-sm" data-toggle="tooltip"
+                                                            data-placement="top" title="Sophia Lee"
+                                                            src="./../../../assets/p10.png" alt="">
+                                                    </div>
+                                                    <span class="font-weight-bold small text-primary">4 mutual
+                                                        connections</span>
+                                                </div>
+                                                <div class="network-item-footer py-3 d-flex text-center">
+                                                    <div class="col-6 pl-3 pr-1">
+                                                        <button type="button" class="btn btn-primary btn-sm btn-block">
+                                                            Connect </button>
+                                                    </div>
+                                                    <div class="col-6 pr-3 pl-1">
+                                                        <button type="button"
+                                                            class="btn btn-outline-primary btn-sm btn-block"> <i
+                                                                class="feather-user-plus"></i> Follow </button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">
+                            <div class="p-3 w-100">
+                                <h6>Soon in next free update</h6>
+                            </div>
+                        </div>
+                        <div class="tab-pane fade" id="contact" role="tabpanel" aria-labelledby="contact-tab">
+                            <div class="p-3">
+                                <div class="col-md-4" *ngFor = "let i of peopleLis">
+                                    <a href="">
+                                        <div class="border network-item rounded mb-3">
+                                            <div class="p-3 d-flex align-items-center network-item-header">
+                                                <div class="dropdown-list-image mr-3">
+                                                    <img class="rounded-circle" src="./../../../assets/p10.png" alt="">
+                                                </div>
+                                                <div class="font-weight-bold">
+                                                    <h6 class="font-weight-bold text-dark mb-0">Sophia Lee</h6>
+                                                    <div class="small text-black-50">Photographer at Photography
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div
+                                                class="d-flex align-items-center p-3 border-top border-bottom network-item-body">
+                                                <div class="overlap-rounded-circle">
+                                                    <img class="rounded-circle shadow-sm" data-toggle="tooltip"
+                                                        data-placement="top" title="Sophia Lee"
+                                                        src="./../../../assets/p10.png" alt="">
+                                                    <img class="rounded-circle shadow-sm" data-toggle="tooltip"
+                                                        data-placement="top" title="John Doe"
+                                                        src="./../../../assets/p10.png" alt="">
+                                                    <img class="rounded-circle shadow-sm" data-toggle="tooltip"
+                                                        data-placement="top" title="Julia Cox"
+                                                        src="./../../../assets/p10.png" alt="">
+                                                    <img class="rounded-circle shadow-sm" data-toggle="tooltip"
+                                                        data-placement="top" title="Robert Cook"
+                                                        src="./../../../assets/p10.png" alt="">
+                                                    <img class="rounded-circle shadow-sm" data-toggle="tooltip"
+                                                        data-placement="top" title="Sophia Lee"
+                                                        src="./../../../assets/p10.png" alt="">
+                                                </div>
+                                                <span class="font-weight-bold small text-primary">4 mutual
+                                                    connections</span>
+                                            </div>
+                                            <div class="network-item-footer py-3 d-flex text-center">
+                                                <div class="col-6 pl-3 pr-1">
+                                                    <button type="button" class="btn btn-primary btn-sm btn-block">
+                                                        Connect </button>
+                                                </div>
+                                                <div class="col-6 pr-3 pl-1">
+                                                    <button type="button"
+                                                        class="btn btn-outline-primary btn-sm btn-block"> <i
+                                                            class="feather-user-plus"></i> Follow </button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="tab-pane fade" id="type" role="tabpanel" aria-labelledby="type-tab">
+                            <div class="p-3 w-100">
+                                <h6>Soon in next free update</h6>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </main>
+            <aside class="col col-xl-3 order-xl-1 col-lg-6 order-lg-2 col-md-6 col-sm-6 col-12">
+                <div class="box mb-3 shadow-sm border rounded bg-white profile-box text-center">
+                   <div class="px-3 border-bottom">  
+                        <!-- py-4  -->
+                      <img src="./../../../assets/p10.png" class="img-fluid mt-2 rounded-circle" alt="Responsive image">
+                      <h5 class="font-weight-bold text-dark mb-1 mt-4">Gurdeep Osahan</h5>
+                      <p class="mb-0 text-muted">UI / UX Designer</p>
+                   </div>
+                   <div class="d-flex">
+                      <div class="col-6 border-right p-3">
+                         <h6 class="font-weight-bold text-dark mb-1">358</h6>
+                         <p class="mb-0 text-black-50 small">Connections</p>
+                      </div>
+                      <div class="col-6 p-3">
+                         <h6 class="font-weight-bold text-dark mb-1">85</h6>
+                         <p class="mb-0 text-black-50 small">Views</p>
+                      </div>
+                   </div>
+                   <div class="overflow-hidden border-top">
+                      <a class="font-weight-bold p-3 d-block" href=""> View my profile </a>
+                   </div>
+                </div>
+                <div class="box mb-3 shadow-sm rounded bg-white view-box overflow-hidden">
+                   <div class="box-title border-bottom p-3">
+                      <h6 class="m-0">Profile Views</h6>
+                   </div>
+                   <div class="d-flex text-center">
+                      <div class="col-6 border-right  px-2"><!-- py-4  -->
+                         <h5 class="font-weight-bold text-info mb-1">08 <i class="feather-bar-chart-2"></i></h5>
+                         <p class="mb-0 text-black-50 small">last 5 days</p>
+                      </div>
+                      <div class="col-6  px-2"> <!-- py-4  -->
+                         <h5 class="font-weight-bold text-success mb-1">+ 43% <i class="feather-bar-chart"></i></h5>
+                         <p class="mb-0 text-black-50 small">Since last week</p>
+                      </div>
+                   </div>
+                   <div class="overflow-hidden border-top text-center">
+                      <img src="./../../../assets/chart.png" class="img-fluid" alt="Responsive image">
+                   </div>
+                </div>
+                <div class="box shadow-sm mb-3 rounded bg-white ads-box text-center">
+                   <img src="./../../../assets/p10.png" class="img-fluid" alt="Responsive image">
+                   <div class="p-3 border-bottom">
+                      <h6 class="font-weight-bold text-dark">Osahan Solutions</h6>
+                      <p class="mb-0 text-muted">Looking for talent?</p>
+                   </div>
+                   <div class="p-3">
+                      <button type="button" class="btn btn-outline-primary pl-4 pr-4"> POST A JOB </button>
+                   </div>
+                </div>
+             </aside>
+        </div>
+    </div>
+</div>

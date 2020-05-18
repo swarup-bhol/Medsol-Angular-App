@@ -7,6 +7,7 @@ import { RegisterComponent } from './Medsol-Form/register/register.component';
 import { ForgotPasswordComponent } from './Medsol-Form/forgot-password/forgot-password.component';
 import { ProfilePageComponent } from './Medsol-Profile/profile-page/profile-page.component';
 import { EditProfileComponent } from './Medsol-Profile/edit-profile/edit-profile.component';
+import { PeopleListComponent } from './Medsol-Dashboard/people-list/people-list.component';
 
 
 const routes: Routes = [
@@ -16,6 +17,8 @@ const routes: Routes = [
   {path: "edit-profile",component:EditProfileComponent},
   { path: 'forgot-password', component: ForgotPasswordComponent },
   { path: "", component: DashBoardComponent }, 
+  { path: "peoples", component: PeopleListComponent },
+  { path: "", component: DashBoardComponent },
   { path: '404', component: PageNotFoundComponent },
   { path: '**', redirectTo: '/404' }
 ];

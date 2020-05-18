@@ -2,21 +2,28 @@
     height: 2.5rem;
     width: 2.5rem;
 }
+
+.rounded-circle {
+    border-radius: 50%!important;
+}
 img {
     vertical-align: middle;
     border-style: none;
 }
-.rounded-circle {
-    border-radius: 50%!important;
+.overlap-rounded-circle {
+    margin-right: 9px;
+    padding-left: 9px;
 }
 
+div, a {
+    outline: none !important;
+}
 .overlap-rounded-circle .rounded-circle {
     width: 22px;
     height: 22px;
     border: 2px solid #fff;
     margin: 0 0 0 -9px;
 }
-.job-item-header .img-fluid, .job-item-2 .img-fluid {
-    width: 40px;
-    height: 40px;
+.shadow-sm {
+    box-shadow: 0 6px 22px 0 rgba(0,0,0,0.08) !important;
 }
