@@ -10,7 +10,7 @@
                   <p class="mb-0 mt-0 small"></p>
                </div>
                <div class="box-body p-3">
-                  <form>
+                  <form [formGroup]="profileForm">
                      <div class="row">
                         <!-- Input -->
                         <div class="col-sm-6 mb-2">
@@ -20,7 +20,7 @@
                                  <span class="text-danger">*</span>
                               </label>
                               <div class="form-group">
-                                 <input type="text" class="form-control">
+                                 <input type="text" class="form-control" formControlName="name">
                               </div>
                            <!-- </div> -->
                         </div>
@@ -33,7 +33,7 @@
                                  <span class="text-danger">*</span>
                               </label>
                               <div class="form-group">
-                                 <input type="email" class="form-control">
+                                 <input type="email" class="form-control" formControlName="email" disabled>
                               </div>
                            <!-- </div> -->
                         </div>
@@ -47,7 +47,7 @@
                                  <span class="text-danger">*</span>
                               </label>
                               <div class="form-group">
-                                 <input class="form-control" type="tel">
+                                 <input class="form-control" type="tel" formControlName="mobile" disabled>
                               </div>
                            <!-- </div> -->
                         </div>
@@ -60,7 +60,7 @@
                                  <span class="text-danger">*</span>
                               </label>
                               <div class="form-group">
-                                 <input type="date" class="form-control">
+                                 <input type="date" class="form-control" formControlName="dob">
                               </div>
                            <!-- </div> -->
                         </div>
@@ -76,8 +76,8 @@
                                  <span class="text-danger">*</span>
                               </label>
                               <div class="form-group">
-                                 <select class="form-control">
-                                    <option>Select</option>
+                                 <select class="form-control" formControlName="profession" (change)='onProffessionChange(prof.value)' #prof>
+                                    <option *ngFor="let pro of professions" [value]="pro.professionId">{{pro.professionName}}</option>
                                  </select>
                               </div>
                            <!-- </div> -->
@@ -91,8 +91,8 @@
                                  <span class="text-danger">*</span>
                               </label>
                               <div class="form-group">
-                                 <select class="form-control">
-                                    <option>Select</option>
+                                 <select class="form-control" formControlName="grade">
+                                    <option *ngFor="let grade of grades" [value]="grade.gradeId">{{grade.gradeName}}</option>
                                  </select>
                               </div>
                            <!-- </div> -->
@@ -107,7 +107,7 @@
                                  <span class="text-danger">*</span>
                               </label>
                               <div class="form-group">
-                                 <input type="text" class="form-control">
+                                 <input type="text" class="form-control" formControlName="institute">
                               </div>
                            <!-- </div> -->
                         </div>
@@ -123,8 +123,10 @@
                                  <span class="text-danger">*</span>
                               </label>
                               <div class="form-group">
-                                 <select class="form-control">
+                                 <select class="form-control" formControlName="specialization" #specialis
+                                 (change)='onSpecSelected(specialis.value)'>
                                     <option>Select</option>
+                                    <option *ngFor="let spec of specializations" [value]="spec.specializationId">{{spec.specializationName}}</option>
                                  </select>
                               </div>
                            <!-- </div> -->
@@ -138,8 +140,8 @@
                                  <span class="text-danger">*</span>
                               </label>
                               <div class="form-group">
-                                 <select class="form-control">
-                                    <option>Select</option>
+                                 <select class="form-control" formControlName="subspecialization">
+                                    <option *ngFor="let subSpe of subspecializations" [value]="subSpe.subSpecId">{{subSpe.subSpecName}}</option>
                                  </select>
                               </div>
                            <!-- </div> -->
@@ -148,13 +150,12 @@
                      </div>
                   </form>
                </div>
+               <button type="button" class="btn btn-sm btn-outline-instagram btn-block" (click) = "createProfile()"> Sava & Next</button>
             </div>
-            <div class="mb-3 text-right">
-               <a class="font-weight-bold btn btn-link rounded p-3"> &nbsp;&nbsp;&nbsp;&nbsp;
-                  Cancel &nbsp;&nbsp;&nbsp;&nbsp; </a>
-               <a class="font-weight-bold btn btn-primary rounded p-3"> &nbsp;&nbsp;&nbsp;&nbsp;
-                  Sava Chenges &nbsp;&nbsp;&nbsp;&nbsp; </a>
-            </div>
+            <!-- <div class="mb-3 text-right">
+               <a class="font-weight-bold btn btn-primary rounded p-3" (click) = "createProfile()"> &nbsp;&nbsp;&nbsp;&nbsp;
+                  Sava & Next &nbsp;&nbsp;&nbsp;&nbsp; </a>
+            </div> -->
          </main>
          <aside class="col-md-4">
             <div class="mb-3 border rounded bg-white profile-box text-center w-10">
@@ -177,7 +178,8 @@
             <!-- Document Upload -->
             <div class="mb-3 border rounded bg-white profile-box text-center w-10">
                <div class="box-title border-bottom p-3">
-                  <h6 class="m-0">Upload Document</h6>
+                  <h6 class="m-0">Upload Document<span class="text-danger">*</span></h6>
+                  <span class="text-danger">Please Upload document</span>
                </div>
                <div class="p-4 d-flex align-items-center">
                   <img src="./../../../assets/pic.png" class="img-fluid rounded-circle" alt="">
@@ -187,7 +189,7 @@
                         <input id="fileAttachmentBtn" name="file-attachment" type="file" class="d-none">
                      </label>
                      <button data-toggle="tooltip" data-placement="top" data-original-title="Delete" type="submit"
-                        class="btn btn-danger"><i class="fa fa-trash" aria-hidden="true"></i></button>
+                        class="btn btn-danger" ><i class="fa fa-trash" aria-hidden="true"></i></button>
                   </div>
                </div>
             </div>

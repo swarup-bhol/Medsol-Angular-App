@@ -1,55 +1,70 @@
-
-      <div class="bg-white  py-4">
-         <div class="container">
-            <div class="row justify-content-center d-flex vh-100">
-               <div class="col-md-4 mx-auto">
-                  <div class="osahan-login">
-                     <div class="text-center mb-4">
-                        <a href=""><img src="" alt=""></a>
-                        <h5 class="font-weight-bold mt-3">Welcome Back</h5>
-                        <p class="text-muted">Don't miss your next opportunity. Sign in to stay updated on your professional world.</p>
-                     </div>
-                     <form action="">
-                        <div class="form-group">
-                           <label class="mb-1">Email or Phone</label>
-                           <div class="position-relative icon-form-control">
-                            <i class="fa fa-envelope-o" aria-hidden="true"></i>
-                              <input type="email" class="form-control">
-                           </div>
-                        </div>
-                        <div class="form-group">
-                           <label class="mb-1">Password</label>
-                           <div class="position-relative icon-form-control">
-                            <i class="fa fa-unlock-alt" aria-hidden="true"></i>
-                              <input type="password" class="form-control">
-                           </div>
-                        </div>
-                        <div class="custom-control custom-checkbox mb-3">
-                           <input type="checkbox" class="custom-control-input" id="customCheck1">
-                           <label class="custom-control-label" for="customCheck1">Remember password</label>
-                        </div>
-                        <button class="btn btn-primary btn-block text-uppercase" type="submit"> Sign in </button>
-                        <div class="text-center mt-3 border-bottom pb-3">
-                           <p class="small text-muted">Or login with</p>
-                           <div class="row">
-                              <div class="col-4">
-                                 <button type="button" class="btn btn-sm btn-outline-instagram btn-block"><i class="feather-instagram"></i> Instagram</button>
-                              </div>
-                              <div class="col-4">
-                                 <button type="button" class="btn btn-sm btn-outline-linkedin btn-block"><i class="feather-linkedin"></i> Linkedin</button>
-                              </div>
-                              <div class="col-4">
-                                 <button type="button" class="btn btn-sm btn-outline-facebook btn-block"><i class="feather-facebook"></i> Facebook</button>
-                              </div>
-                           </div>
-                        </div>
-                        <div class="py-3 d-flex align-item-center">
-                           <a [routerLink]="['/forgot-password']">Forgot password?</a>
-                           <span class="ml-auto"> New to Medsol? <a class="font-weight-bold" [routerLink]="['/signup']">Join now</a></span>
-                        </div>
-                     </form>
-                  </div>
+<div class="bg-white  py-4">
+   <div class="container">
+      <div class="row justify-content-center d-flex vh-100">
+         <div class="col-md-4 mx-auto">
+            <div class="osahan-login mt-3">
+               <div class="text-center mb-4">
+                  <a href=""><img src="" alt=""></a>
+                  <h5 class="font-weight-bold mt-3">Medsol</h5>
+                  <p class="text-muted">Stay connected to Medsol.Never miss any update to world.</p>
                </div>
+               <div class="alert alert-danger text-center" *ngIf="invalid">{{errorMessage}}</div>
+               <form [formGroup]="loginForm">
+                  <div class="form-group">
+                     <label class="mb-1">Email</label>
+                     <div class="position-relative icon-form-control">
+                        <i class="fa fa-envelope-o" aria-hidden="true"></i>
+                        <input type="email" class="form-control" formControlName="email"
+                           [ngClass]="{ 'is-invalid': f.email.invalid && (f.email.dirty || f.email.touched || isSubmited) }">
+                     </div>
+                     <div *ngIf="f.email.invalid && (f.email.dirty || f.email.touched || isSubmited)"
+                        class="invalid-feedback d-block">
+                        <div *ngIf="f.email.errors.required" class="alert alert-danger"> Email Required</div>
+                        <div *ngIf="f.email.errors.email" class="alert alert-danger"> Enter Valid Email</div>
+                     </div>
+                  </div>
+                  <div class="form-group">
+                     <label class="mb-1">Password</label>
+                     <div class="position-relative icon-form-control">
+                        <i class="fa fa-unlock-alt" aria-hidden="true"></i>
+                        <input type="password" class="form-control" formControlName="password"
+                           [ngClass]="{ 'is-invalid': f.password.invalid && (f.password.dirty || f.password.touched || isSubmited) }">
+                     </div>
+                     <div *ngIf="f.password.invalid && (f.password.dirty || f.password.touched || isSubmited)"
+                        class="invalid-feedback d-block">
+                        <div *ngIf="f.password.errors.required" class="alert alert-danger"> Password Required</div>
+                     </div>
+                  </div>
+                  <div class="custom-control custom-checkbox mb-3">
+                     <input type="checkbox" class="custom-control-input" id="customCheck1">
+                     <label class="custom-control-label" for="customCheck1">Remember password</label>
+                  </div>
+                  <button class="btn btn-primary btn-block text-uppercase" (click)="loginUser()"> Sign in </button>
+                  <div class="text-center mt-3 border-bottom pb-3">
+                     <p class="small text-muted">Or login with</p>
+                     <div class="row">
+                        <div class="col-4">
+                           <button type="button" class="btn btn-sm btn-outline-instagram btn-block"><i
+                                 class="feather-instagram"></i> Instagram</button>
+                        </div>
+                        <div class="col-4">
+                           <button type="button" class="btn btn-sm btn-outline-linkedin btn-block"><i
+                                 class="feather-linkedin"></i> Linkedin</button>
+                        </div>
+                        <div class="col-4">
+                           <button type="button" class="btn btn-sm btn-outline-facebook btn-block"><i
+                                 class="feather-facebook"></i> Facebook</button>
+                        </div>
+                     </div>
+                  </div>
+                  <div class="py-3 d-flex align-item-center">
+                     <a [routerLink]="['/forgot-password']">Forgot password?</a>
+                     <span class="ml-auto"> New to Medsol? <a class="font-weight-bold" [routerLink]="['/signup']">Join
+                           now</a></span>
+                  </div>
+               </form>
             </div>
          </div>
       </div>
+   </div>
+</div>

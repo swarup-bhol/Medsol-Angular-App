@@ -1,0 +1,61 @@
+<div class="box shadow-sm border rounded bg-white mb-3 osahan-share-post">
+    <ul class="nav nav-justified border-bottom osahan-line-tab" id="myTab" role="tablist">
+        <li class="nav-item">
+            <a class="nav-link active" id="home-tab" data-toggle="tab" href="#home" role="tab" aria-controls="home"
+                aria-selected="true"><i class="fa fa-pencil-square-o" aria-hidden="true"></i> Share an update</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" id="profile-tab" data-toggle="tab" href="#profile" role="tab" aria-controls="profile"
+                aria-selected="false"><i class="fa fa-picture-o" aria-hidden="true"></i>
+                Upload a photo</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" id="contact-tab" data-toggle="tab" href="#contact" role="tab" aria-controls="contact"
+                aria-selected="false"><i class="fa fa-id-card-o" aria-hidden="true"></i>
+                Write an article</a>
+        </li>
+    </ul>
+    <div class="tab-content" id="myTabContent">
+        <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
+            <div class="p-3 d-flex align-items-center w-100" href="#">
+                <div class="dropdown-list-image mr-3">
+                    <img class="rounded-circle"
+                     src="http://localhost:8080/api/medsol/v1/profilePic/{{userId}}"
+                     onerror="this.src='./../../../assets/pic.png';" alt="Responsive image" />
+                    <!-- <img class="rounded-circle" src="./../../../assets/img.jpg" alt=""> -->
+                    <div class="status-indicator bg-success"></div>
+                </div>
+                <div class="w-100">
+                    <textarea placeholder="Write your thoughts..." class="form-control border-0 p-0 shadow-none"
+                        rows="1" [(ngModel)]="message"></textarea>
+                </div>
+            </div>
+        </div>
+        <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">
+            <div class="p-3 w-100">
+                <textarea placeholder="Write your thoughts..." class="form-control border-0 p-0 shadow-none"
+                    rows="3" [(ngModel)]="message"></textarea>
+                <div (click)="fileInput.click()"><i class="fa fa-picture-o" aria-hidden="true"></i>Image/Video</div>
+                <input style="display: none" type="file" (change)="onFileChanged($event)" #fileInput>
+                <div *ngIf="imageURL && imageURL !== ''" style="margin-top: 2%; margin-left: 2%;">
+                    <img [src]="imageURL" height="60px" width="60px">
+                    <span class="badge badge-danger badge-counter" (click)="deleteImage()">X</span>
+                </div>
+            </div>
+        </div>
+        <div class="tab-pane fade" id="contact" role="tabpanel" aria-labelledby="contact-tab">
+            <div class="p-3 w-100">
+                <textarea placeholder="Write an article..." class="form-control border-0 p-0 shadow-none"
+                    rows="3" [(ngModel)]="message"></textarea>
+            </div>
+        </div>
+    </div>
+    <div class="border-top p-3 d-flex align-items-center">
+        <div class="mr-auto"><a href="#" class="text-link small"><i class="feather-map-pin"></i> Add
+                Location</a></div>
+        <div class="flex-shrink-1">
+            <button type="button" class="btn btn-light btn-sm">Preview</button>
+            <button type="button" class="btn btn-primary btn-sm" (click)="postStatus()">Post Status</button>
+        </div>
+    </div>
+</div>

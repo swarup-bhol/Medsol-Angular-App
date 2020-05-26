@@ -5,34 +5,6 @@ body {
     font-family: 'Ubuntu', sans-serif;
 }
 
-/*
-Template Name: Osahanin - Job Portal & Social Network HTML Template
-Author: Askbootstrap
-Author URI: https://themeforest.net/user/askbootstrap
-Version: 1.0
-*/
-/*
-    -- body
-    -- Slider
-    -- Top Nav
-    -- Card Design
-    -- Tab Design
-    -- Login Page Designs
-    -- People List
-    -- Job List
-    -- Network Item
-    -- FAQ
-    -- Chat
-    -- Extra
-    -- Mobile Media
-*/
-@import url('https://fonts.googleapis.com/css?family=Ubuntu:300,300i,400,400i,500,500i,700,700i&display=swap');
-/* body */
- body {
-     background: #edf2f6;
-     font-size: 13px;
-     font-family: 'Ubuntu', sans-serif;
-}
  p{
      color: #888da8
 }
@@ -478,3 +450,6 @@ Version: 1.0
     font-size: 13px;
     font-family: 'Ubuntu', sans-serif;
 }
+
+html, body { height: 100%; }
+body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }

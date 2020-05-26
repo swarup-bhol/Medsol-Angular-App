@@ -20,3 +20,45 @@ img {
     width: 40px;
     height: 40px;
 }
+aside .img-fluid {
+    max-width: 50%;
+    height: auto;
+}
+.btn-outline-follow {
+    border-color: #2a5b83;
+    background-color: #2a5b83;
+    color: #fff;
+}
+.btn-outline-following {
+    border-color: #dee2e6;
+    background-color: #dee2e6;
+    color: #101010;
+}
+.cmt-img img{
+    height: 1.2rem;
+    width: 1.2rem;
+}
+.cmt-img .status-indicator{
+    height: .55rem;
+    width: .55rem;
+    border-radius: 100%;
+    position: absolute;
+    top: 30%;
+    right: 0;
+}
+.mo-3{
+    margin-right: 1rem!important
+}
+.cmt-name{
+    font-size: 11px;
+}
+.sugg-btn{
+    font-size: 10px;
+}
+.post-icons{
+    display: flex;
+}
+.comment-height{
+    max-height: 153px;
+    overflow-y:auto;
+}

@@ -8,33 +8,57 @@
                         <h5 class="font-weight-bold mt-3">Join Medsol</h5>
                         <p class="text-muted">Share medical cases</p>
                     </div>
-                    <form action="">
+                    <div class="alert alert-danger text-center" *ngIf="invalid">{{errorMessage}}</div>
+                    <form [formGroup]="signupForm" (ngSubmit)="createUser()">
                         <div class="form-group">
                             <label class="mb-1">Full Name</label>
                             <div class="position-relative icon-form-control">
                                 <i class="fa fa-user-o" aria-hidden="true" position-absolute></i>
-                                <input type="text" class="form-control">
+                                <input type="text" class="form-control" formControlName="name"
+                                    [ngClass]="{ 'is-invalid': f.name.invalid && (f.name.dirty || f.name.touched || isSubmited) }">
+                            </div>
+                            <div *ngIf="f.name.invalid && (f.name.dirty || f.name.touched || isSubmited)"
+                                class="invalid-feedback d-block">
+                                <div *ngIf="f.name.errors.required" class="alert alert-danger"> Name is Required</div>
                             </div>
                         </div>
                         <div class="form-group">
                             <label class="mb-1">Email</label>
                             <div class="position-relative icon-form-control">
                                 <i class="fa fa-envelope-o" aria-hidden="true"></i>
-                                <input type="email" class="form-control">
-                             </div>
+                                <input type="email" class="form-control" formControlName="email"
+                                    [ngClass]="{ 'is-invalid': f.email.invalid && (f.email.dirty || f.email.touched || isSubmited) }">
+                            </div>
+                            <div *ngIf="f.email.invalid && (f.email.dirty || f.email.touched || isSubmited)"
+                                class="invalid-feedback d-block">
+                                <div *ngIf="f.email.errors.required" class="alert alert-danger"> Email Required</div>
+                                <div *ngIf="f.email.errors.email" class="alert alert-danger"> Enter Valid Email</div>
+                            </div>
                         </div>
                         <div class="form-group">
                             <label class="mb-1">Mobile</label>
                             <div class="position-relative icon-form-control">
                                 <i class="fa fa-mobile" aria-hidden="true"></i>
-                                <input type="text" class="form-control">
+                                <input type="text" class="form-control" formControlName="mobile" [ngClass]="{ 'is-invalid': f.mobile.invalid && (f.mobile.dirty || f.mobile.touched || isSubmitted) }">
+                            </div>
+                            <div *ngIf="f.mobile.invalid && (f.mobile.dirty || f.mobile.touched || isSubmited)"
+                                class="invalid-feedback d-block">
+                                <div *ngIf="f.mobile.errors.required" class="alert alert-danger"> Mobile Required</div>
+                                <div *ngIf="f.mobile.errors.minlength" class="alert alert-danger"> Mobile must be <strong>10 digit</strong></div>
+                                <div *ngIf="f.mobile.errors.maxlength" class="alert alert-danger"> Mobile must be <strong>10 ddigit</strong></div>
                             </div>
                         </div>
                         <div class="form-group">
                             <label class="mb-1">Password (6 or more characters)</label>
                             <div class="position-relative icon-form-control">
                                 <i class="fa fa-unlock-alt" aria-hidden="true"></i>
-                                <input type="password" class="form-control">
+                                <input type="password" class="form-control" formControlName="password"
+                                    [ngClass]="{ 'is-invalid': f.password.invalid && (f.password.dirty || f.password.touched || isSubmited) }">
+                            </div>
+                            <div *ngIf="f.password.invalid && (f.password.dirty || f.password.touched || isSubmited)"
+                                class="invalid-feedback d-block">
+                                <div *ngIf="f.password.errors.required" class="alert alert-danger"> Password Required</div>
+                                <div *ngIf="f.password.errors.minlength" class="alert alert-danger"> Password must be <strong>6 characters</strong></div>
                             </div>
                         </div>
                         <!-- <div class="form-group">
@@ -63,7 +87,8 @@
                         </div>
                         <div class="py-3 d-flex align-item-center">
                             <a href [routerLink]="['/forgot-password']">Forgot password?</a>
-                            <span class="ml-auto"> Already on Osahanin? <a class="font-weight-bold" [routerLink]="['/login']">Sign
+                            <span class="ml-auto"> Already on Medsol? <a class="font-weight-bold"
+                                    [routerLink]="['/login']">Sign
                                     in</a></span>
                         </div>
                     </form>

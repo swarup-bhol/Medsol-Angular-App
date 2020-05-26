@@ -71,3 +71,130 @@ img {
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
 } */
+.display-search-item{
+    z-index: 1;
+    position:relative;
+    /* background-color: white; */
+}
+
+.serach-item{
+    border: 1px solid rgb(243, 240, 240);
+    display: block;
+    left: 50%;
+    margin-left: -112px;
+    position: absolute;
+    right: -12px;
+    top: 45px;
+    width: 225px;
+    z-index: 9;
+    height: 250px;
+    overflow:auto;
+    scrollbar-width: 20px;
+    background-color: white;
+    box-shadow: -1px 1px 1px -1px rgba(0,0,0,.2), 0 1px 1px 0 rgba(0,0,0,.14), 0 1px 3px 0 rgba(0,0,0,.12);
+}
+
+
+.serach-item ul{
+    padding-left: 0px;
+    margin: unset;
+}
+
+.serach-item ul li{
+    list-style: none;
+    padding: 15px;
+    background-color: white;
+    border-bottom: 1px solid #e4dddd;
+}
+
+.outer-search-div{
+    flex: 0 1 auto;
+    min-width: 125px;
+    width: 225px;
+    border: 1px solid rgb(243, 240, 240);
+}
+
+.outer-search-div input{
+    width:85%;
+    float: left;
+    border: none;
+    
+}
+
+.outer-search-div button{
+    text-align: -webkit-auto;
+    font-size: 23px;
+
+}
+
+.outer-search-div input:focus{
+    outline: none;
+    border: none;
+}
+
+.search-details{
+    display: flex;
+    flex-direction: row;
+    margin-right: 0px;
+    white-space: nowrap;
+    width: 100%;
+    
+}
+
+.serch-detail-img img{
+    height: 30px;
+    width: 30px;
+    border-radius: 30px;
+}
+
+.search-details-text{
+    display: flex;
+    flex-direction: column;
+    padding-left: 10px;
+    padding: 0px 0px 5px 10px;
+    margin-top: -6px;
+}
+
+.main-text span{
+    font-size: 16px;
+    color: rgb(59, 54, 54);
+    font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+    text-overflow: ellipsis;
+}
+
+.profile-text{
+    line-height: 5px;
+    padding: unset;
+
+}
+
+.profile-text span{
+    font-size: 12px;
+    color: rgb(149, 148, 141);
+    font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+}
+
+.triangle{
+    
+    bottom: 0;
+    margin-left: -0.5rem;
+    background: #fff;
+    content: ' ';
+    height: 16px;
+    left: 0;
+    /* margin: auto; */
+    position: absolute;
+    right: 0;
+    top: 12px;
+    -webkit-transform: rotate(45deg);
+    transform: rotate(45deg);
+    width: 16px;
+    z-index: 1;
+    border: 1px solid  rgb(243, 240, 240);
+    box-shadow: -1px 1px 1px -1px rgba(0,0,0,.2), 0 1px 1px 0 rgba(0,0,0,.14), 0 1px 3px 0 rgba(0,0,0,.12);
+
+}
+
+.outer-search-div .triangle{
+    top:39px;
+}

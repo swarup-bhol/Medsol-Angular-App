@@ -79,3 +79,14 @@ button, input, optgroup, select, textarea {
     font-size: inherit;
     line-height: inherit;
 }
+
+
+.btn-outline-instagram {
+    border-color: #2a5b83;
+    background-color: #2a5b83;
+    color: #fff;
+}
+.img-fluid {
+    max-width: 50%;
+    height: auto;
+}
