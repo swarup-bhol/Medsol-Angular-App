@@ -1,7 +1,9 @@
 
+<mat-progress-bar mode="indeterminate" *ngIf="loader"></mat-progress-bar>
+
 <nav class="navbar navbar-expand navbar-dark bg-dark osahan-nav-top p-0" style="height: 55px;" *ngIf ="userId != null">
   <div class="container">
-     <a class="navbar-brand mr-2">Medsol</a>
+     <a class="navbar-brand mr-2" [routerLink]="['']"><img src="./../assets/1200x630wa.png" height="10px" width="30px"></a>
      <div class="d-none d-sm-inline-block form-inline mr-auto my-2 my-md-0 mw-100 navbar-search" >
         <div class="input-group">
            <input type="text" class="form-control shadow-none border-0" placeholder="Search ..." aria-label="Search" aria-describedby="basic-addon2" [(ngModel)]="searchText">
@@ -41,7 +43,7 @@
            </a>
            <!-- Dropdown - Alerts -->
            <div class="dropdown-list dropdown-menu dropdown-menu-right shadow-sm">
-              1st drop down
+              Messages are
            </div>
         </li>
         <li class="nav-item dropdown no-arrow mx-1 osahan-list-dropdown">

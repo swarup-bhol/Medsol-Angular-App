@@ -18,12 +18,15 @@ export class ProfileInfoComponent implements OnInit {
   specializations: [];
   subspecializations: [];
   profileForm: FormGroup;
-
+  fileData: File;
+  docsData: File;
 
   fullName: string;
   email: string;
   mobile: string;
   isSubmited = false;
+  userId: string;
+  gradeValue: boolean;
 
   constructor(
     private _fb: FormBuilder,
@@ -39,10 +42,11 @@ export class ProfileInfoComponent implements OnInit {
     this.fullName = this._route.snapshot.paramMap.get('name');
     this.email = this._route.snapshot.paramMap.get('email');
     this.mobile = this._route.snapshot.paramMap.get('mobile');
+    this.userId = this._route.snapshot.paramMap.get('id');
     this.profileForm = this._fb.group({
       name: [''],
-      email: [''],
-      mobile: [''],
+      email: [{value:'',disabled : true}],
+      mobile: [{value:'',disabled : true}],
       dob: [''],
       profession: [''],
       grade: [''],
@@ -90,6 +94,7 @@ export class ProfileInfoComponent implements OnInit {
    * @returns void
    */
   onProffessionChange(profId) {
+    if(profId == 4 || profId == 6) this.gradeValue = false; else this.gradeValue = true;
     this._as.getRequest(APIEndpoints.GRADE_BY_PROFESSION + profId).subscribe(
       response => {if (response.status == 200 && response.message == 'Success') this.grades = response.result;},
       error => {this._ns.showSnakBar(Constant.SERVER_ERROR, "")})
@@ -121,6 +126,26 @@ export class ProfileInfoComponent implements OnInit {
     this._as.getRequest(APIEndpoints.SUB_SPEC_BY_SPEC + specId).subscribe(
       response => {if (response.status == 200 && response.message == 'Success')this.subspecializations = response.result;},
       error => {this._ns.showSnakBar(Constant.SERVER_ERROR, "")})
+  }
+  // Change profile picturte
+  onprofileChange(event) {
+    this.fileData = <File>event.target.files[0];
+    const formData = new FormData();
+    formData.append('file', this.fileData);
+    this._as.postRequest(APIEndpoints.UPLOAD_PROFILE_PICTURE + this.userId, formData).subscribe(
+      data => { if (data.status == 200) {   this._ns.showSnakBar(Constant.UPLOADED_SUCCESSFULLY,'');location.reload();}},
+      error => {  this._ns.showSnakBar(Constant.SERVER_ERROR,'')} );
+  }
+  // Change profile picturte
+  onDocUpload(event) {
+    this.docsData = <File>event.target.files[0];
+    const formData = new FormData();
+    // return
+    formData.append('file', this.docsData);
+    formData.append('userId',this.userId)
+    this._as.postRequest(APIEndpoints.UPLOAD_DOCUMENT, formData).subscribe(
+      data => { if (data.status == 200) {   this._ns.showSnakBar(Constant.UPLOADED_SUCCESSFULLY,'');location.reload();}},
+      error => {  this._ns.showSnakBar(Constant.SERVER_ERROR,'')} );
   }
 
 }

@@ -33,7 +33,7 @@
                                  <span class="text-danger">*</span>
                               </label>
                               <div class="form-group">
-                                 <input type="email" class="form-control" formControlName="email" disabled>
+                                 <input type="email" class="form-control" formControlName="email" >
                               </div>
                            <!-- </div> -->
                         </div>
@@ -47,7 +47,7 @@
                                  <span class="text-danger">*</span>
                               </label>
                               <div class="form-group">
-                                 <input class="form-control" type="tel" formControlName="mobile" disabled>
+                                 <input class="form-control" type="tel" formControlName="mobile" >
                               </div>
                            <!-- </div> -->
                         </div>
@@ -84,7 +84,7 @@
                         </div>
                         <!-- End Input -->
                         <!-- Input -->
-                        <div class="col-sm-6 mb-2">
+                        <div class="col-sm-6 mb-2" *ngIf="gradeValue">
                            <!-- <div class="js-form-message"> -->
                               <label id="gradeLabel" class="form-label">
                                  Grade
@@ -163,12 +163,13 @@
                   <h6 class="m-0">Upload Profile Picture</h6>
                </div>
                <div class="p-4 d-flex align-items-center">
-                  <img src="./../../../assets/p10.png" class="img-fluid rounded-circle" alt="">
+                  <img class="img-fluid rounded-circle" src="http://localhost:8080/api/medsol/v1/profilePic/{{userId}}"
+                           onerror="this.src='./../../../assets/pic.png';" alt="..." />
                   <div class="p-4">
                      <label data-toggle="tooltip" data-placement="top" data-original-title="Upload New Picture"
                         class="btn btn-info m-0" for="fileAttachmentBtn">
-                        <i class="fa fa-picture-o" aria-hidden="true"></i>
-                        <input id="fileAttachmentBtn" name="file-attachment" type="file" class="d-none">
+                        <i class="fa fa-picture-o" aria-hidden="true" (click)="profile.click()"></i>
+                        <input id="fileAttachmentBtn" name="file-attachment" type="file" class="d-none"  (change)="onprofileChange($event)" #profile>
                      </label>
                      <button data-toggle="tooltip" data-placement="top" data-original-title="Delete" type="submit"
                         class="btn btn-danger"><i class="fa fa-trash" aria-hidden="true"></i></button>
@@ -179,14 +180,15 @@
             <div class="mb-3 border rounded bg-white profile-box text-center w-10">
                <div class="box-title border-bottom p-3">
                   <h6 class="m-0">Upload Document<span class="text-danger">*</span></h6>
-                  <span class="text-danger">Please Upload document</span>
+                  <span class="text-danger">Please Upload photo of id card</span>
                </div>
                <div class="p-4 d-flex align-items-center">
-                  <img src="./../../../assets/pic.png" class="img-fluid rounded-circle" alt="">
+                  <img class="img-fluid" src="http://localhost:8080/api/medsol/v1/user/document/{{userId}}"
+                           onerror="this.src='./../../../assets/pic.png';" alt="..." />
                   <div class="p-4">
                      <label data-toggle="tooltip" data-placement="top" class="btn btn-info m-0" for="fileAttachmentBtn">
-                        <i class="fa fa-picture-o" aria-hidden="true"></i>
-                        <input id="fileAttachmentBtn" name="file-attachment" type="file" class="d-none">
+                        <i class="fa fa-file-pdf-o" aria-hidden="true" (click)="docsInput.click()"></i>
+                        <input id="fileAttachmentBtn" name="file-attachment" type="file" class="d-none" (change)="onDocUpload($event)"  #docsInput>
                      </label>
                      <button data-toggle="tooltip" data-placement="top" data-original-title="Delete" type="submit"
                         class="btn btn-danger" ><i class="fa fa-trash" aria-hidden="true"></i></button>

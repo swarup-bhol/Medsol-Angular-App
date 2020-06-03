@@ -23,7 +23,7 @@ const routes: Routes = [
   { path: "", component: DashBoardComponent, canActivate: [AuthGuard] },
   { path: "peoples/:type", component: PeopleListComponent, canActivate: [AuthGuard] },
   { path: "search/:query", component: SearchPeopleComponent, canActivate: [AuthGuard] },
-  { path: "profile-info/:name/:mobile/:email", component: ProfileInfoComponent, canActivate: [LoginGuard] },
+  { path: "profile-info/:id/:name/:mobile/:email", component: ProfileInfoComponent, canActivate: [LoginGuard] },
   { path: '404', component: PageNotFoundComponent },
   { path: '**', redirectTo: '/404' }
 ];

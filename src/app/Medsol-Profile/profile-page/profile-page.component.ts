@@ -1,9 +1,12 @@
-import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import { Component, OnInit, Renderer2 } from '@angular/core';
+import { ActivatedRoute, Router, Scroll } from '@angular/router';
 import { APIEndpoints } from 'src/app/Constants/APIEndpoints';
 import { APIServiceService } from 'src/app/Medsol-Services/apiservice.service';
 import { NotificationService } from 'src/app/Medsol-Services/Common/notification.service';
 import { Constant } from 'src/app/Constants/Constant';
+import { ConfirmDialogComponent } from 'src/app/Medsol-Common/confirm-dialog/confirm-dialog.component';
+import { MatDialog } from '@angular/material';
+import { EditPostComponent } from 'src/app/Medsol-Dashboard/edit-post/edit-post.component';
 
 @Component({
   selector: 'app-profile-page',
@@ -13,24 +16,30 @@ import { Constant } from 'src/app/Constants/Constant';
 export class ProfilePageComponent implements OnInit {
 
   peoples: [];
-  posts: [any];
+  posts: any[any];
   userId: any;
   profile: any;
   currentUser;
-  cmtText='';
+  cmtText = '';
   following: any;
+  isEditPost: boolean = false;
+  isEditComment: boolean;
+  max = 3;
+  postId: number;
 
   constructor(
     private _route: ActivatedRoute,
     private _as: APIServiceService,
     private _ns: NotificationService,
-    private _router: Router
+    private _router: Router,
+    private _renderer: Renderer2,
+    public dialog: MatDialog
   ) { }
 
   ngOnInit() {
     this.userId = this._route.snapshot.paramMap.get("id");
     this.currentUser = localStorage.getItem('id');
-    this.isFollowing(this.userId,this.currentUser);
+    this.isFollowing(this.userId, this.currentUser);
     this.getSuggetions();
     this.getProfileInfo();
     this.getUploadedPosts();
@@ -44,7 +53,7 @@ export class ProfilePageComponent implements OnInit {
 
   getProfileInfo() {
     this._as.getRequest(APIEndpoints.PROFILE + this.userId).subscribe(
-      response => { if (response.status == 200) this.profile = response.result;  console.log(response)},
+      response => { if (response.status == 200) this.profile = response.result; console.log(response) },
       error => { if (error.status == 401) { localStorage.removeItem('token'); localStorage.removeItem('id'); this._ns.showSnakBar(Constant.TOKEN_EXPIRE, ''); this._router.navigate(['/login']); } else this._ns.showSnakBar(Constant.SERVER_ERROR, ''); });
   }
 
@@ -60,14 +69,14 @@ export class ProfilePageComponent implements OnInit {
       data => { if (data.status == 200) people.following = data.result.following },
       error => { if (error.status == 401) { localStorage.removeItem('token'); localStorage.removeItem('id'); this._ns.showSnakBar(Constant.TOKEN_EXPIRE, ''); this._router.navigate(['/login']); } else this._ns.showSnakBar(Constant.SERVER_ERROR, '') });
   }
-  
+
   unFollowUser(followingUserId, people) {
     const url = APIEndpoints.FOLLOW + followingUserId + "/unFollow/" + this.userId;
     this._as.putRequest(url, null).subscribe(
       data => { people.following = data.result.following; },
       error => { if (error.status == 401) { localStorage.removeItem('token'); localStorage.removeItem('id'); this._ns.showSnakBar(Constant.TOKEN_EXPIRE, ''); this._router.navigate(['/login']); } else this._ns.showSnakBar(Constant.SERVER_ERROR, ''); });
   }
-  
+
   clickComment(event, postId, message, i) {
     if (event.keyCode == 13 && event.code) {
       event.preventDefault();
@@ -96,9 +105,45 @@ export class ProfilePageComponent implements OnInit {
   }
 
   isFollowing(userId: string, currentUser: string) {
-    this._as.getRequest(APIEndpoints.END_POINT + "user/" + currentUser + "/isFollow/" + userId).subscribe(
-      data => {if (data.status == 200) this.following = data.result;},
+    this._as.getRequest(APIEndpoints.END_POINT + "/user/" + currentUser + "/isFollow/" + userId).subscribe(
+      data => { if (data.status == 200) this.following = data.result; },
       error => { if (error.status == 401) this._ns.showSnakBar(Constant.TOKEN_EXPIRE, ''); else this._ns.showSnakBar(Constant.SERVER_ERROR, '') });
+  }
+
+
+  deletePost(post, i) {
+    const dialogRef = this.dialog.open(ConfirmDialogComponent, { width: '250px', data: { message: 'Ae you sure want to delete  ?', title: 'Delete Post' } });
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        this._as.deleteRequest(APIEndpoints.DELETE_POST + post.postId).subscribe(
+          data => { if (data.status == 200) { this.posts.splice(i); this._ns.showSnakBar(Constant.DELETED_SUCCESSFULLY, ''); } },
+          error => { if (error.status == 401) this._ns.showSnakBar(Constant.TOKEN_EXPIRE, ''); else this._ns.showSnakBar(Constant.SERVER_ERROR, '') });
+      }
+
+    });
+  }
+  editPost(post) {
+    const dialogRef = this.dialog.open(EditPostComponent, { width: '650px', height: 'auto', maxHeight: '400px', data: post });
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        console.log(result)
+      }
+
+    });
+  }
+  deleteComment(comment, commentList) {
+    const dialogRef = this.dialog.open(ConfirmDialogComponent, {
+      width: '250px',
+      data: { message: 'Ae you sure want to delete the comment ?', title: 'Delete Comment' }
+    });
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        this._as.deleteRequest(APIEndpoints.DELETE_COMMENT + comment.commentId).subscribe(
+          data => { if (data.status == 200) { commentList.pop(Comment); this._ns.showSnakBar(Constant.DELETED_SUCCESSFULLY, '') } },
+          error => { if (error.status == 401) this._ns.showSnakBar(Constant.TOKEN_EXPIRE, ''); else this._ns.showSnakBar(Constant.SERVER_ERROR, '') });
+      }
+
+    });
   }
 
 }

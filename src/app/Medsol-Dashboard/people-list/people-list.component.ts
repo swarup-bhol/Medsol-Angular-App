@@ -11,34 +11,35 @@ import { Router, ActivatedRoute } from '@angular/router';
   styleUrls: ['./people-list.component.css']
 })
 export class PeopleListComponent implements OnInit {
-  peopleList: [];
+  peopleList: any[any];
   userId;
   profile: any;
 
   peoples: any;
   pageNo = 0;
   followerList: any;
-  type: string;
+  type;
 
   constructor(
     private _as: APIServiceService,
     private _ns: NotificationService,
     private _router: Router,
     private _route: ActivatedRoute
-  ) { console.log(123) }
+  ) {  }
 
   ngOnInit() {
     this.userId = localStorage.getItem('id');
-    this.type = this._route.snapshot.paramMap.get('type');
-
-    if (this.type == 'suggetions') {
-      this.getSuggetions(this.pageNo);
-    } else if (this.type == 'followings') {
-      this.getAllFollowerList();
-    } else if (this.type == 'follower') {
-      this.getAllFollowingList();
-    } else { this._router.navigate(['/404']); }
-    this.getProfileInfo();
+    // this.type = this._route.snapshot.paramMap.get('type');
+    this._route.params.subscribe(params => {
+      const term = params['type'];
+      if (term == 'suggetions') {
+        this.getSuggetions(this.pageNo);
+      } else if (term == 'followings') {
+        this.getAllFollowerList();
+      } else if (term == 'follower') {
+        this.getAllFollowingList();
+      } else { this._router.navigate(['/404']); }
+    });
   }
 
   getProfileInfo() {
@@ -67,13 +68,19 @@ export class PeopleListComponent implements OnInit {
 
   followUser(followingUser, people) {
     this._as.postRequest(APIEndpoints.FOLLOW + followingUser + "/follow/" + this.userId, "").subscribe(
-      data => { if (data.status == 200) people.peopleList = data.result.following },
+      data => { if (data.status == 200) people.following = data.result.following },
       error => { if (error.status == 401) { localStorage.removeItem('token'); localStorage.removeItem('id'); this._ns.showSnakBar(Constant.TOKEN_EXPIRE, ''); this._router.navigate(['/login']); } else this._ns.showSnakBar(Constant.SERVER_ERROR, '') });
   }
 
   unFollowUser(followingUserId, people) {
     this._as.putRequest(APIEndpoints.FOLLOW + followingUserId + "/unFollow/" + this.userId, null).subscribe(
-      data => { people.peopleList = data.result.following; },
+      data => { people.following = data.result.following; },
+      error => { if (error.status == 401) { localStorage.removeItem('token'); localStorage.removeItem('id'); this._ns.showSnakBar(Constant.TOKEN_EXPIRE, ''); this._router.navigate(['/login']); } else this._ns.showSnakBar(Constant.SERVER_ERROR, ''); });
+  }
+  onScroll(){
+    this.pageNo++;
+    this._as.getRequest(APIEndpoints.SUGGETIONS + this.userId + '/peoples/' + this.pageNo + '/6').subscribe(
+      response => { if (response.status == 200) this.peopleList = this.peopleList.concat(response.result); console.log(response.result) },
       error => { if (error.status == 401) { localStorage.removeItem('token'); localStorage.removeItem('id'); this._ns.showSnakBar(Constant.TOKEN_EXPIRE, ''); this._router.navigate(['/login']); } else this._ns.showSnakBar(Constant.SERVER_ERROR, ''); });
   }
 }

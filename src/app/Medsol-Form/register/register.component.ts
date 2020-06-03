@@ -36,7 +36,7 @@ export class RegisterComponent implements OnInit {
     this._as.postRequest(APIEndpoints.REGISTER_USER, this.signupForm.value).subscribe(
       response => {
         if (response.status == 200 && response.message == 'User Created Successfully') {
-        this.invalid = false; this._router.navigate(['/profile-info', response.result.fullName, response.result.userMobile, response.result.userEmail]);
+        this.invalid = false; this._router.navigate(['/profile-info',response.result.userId, response.result.fullName, response.result.userMobile, response.result.userEmail]);
         } else if (response.status == 409) {
         this.errorMessage = 'User Already Exist'; this.invalid = true;
         } else { this.errorMessage = 'Some Error Happens'; this.invalid = true; }

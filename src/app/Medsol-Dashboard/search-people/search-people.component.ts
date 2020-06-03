@@ -25,11 +25,15 @@ export class SearchPeopleComponent implements OnInit {
   ) { }
 
   ngOnInit() {
+    console.log(1)
     this.userId = localStorage.getItem('id');
-    this.searcItem = this._route.snapshot.paramMap.get('query');
+    this.searcItem = this._route.params.subscribe(params => {
+      const term = params['query'];
+      this.findPeople(term);
+    });
     this.getProfileInfo();
     this.getSuggetions();
-    this.findPeople();
+    ;
   }
 
   getProfileInfo() {
@@ -57,8 +61,8 @@ export class SearchPeopleComponent implements OnInit {
       error => { if (error.status == 401) { localStorage.removeItem('token'); localStorage.removeItem('id'); this._ns.showSnakBar(Constant.TOKEN_EXPIRE, ''); this._router.navigate(['/login']); } else this._ns.showSnakBar(Constant.SERVER_ERROR, ''); });
   }
 
-  findPeople() {
-    this._as.getRequest(APIEndpoints.SEARCH_USER+this.userId+'/'+this.searcItem).subscribe(
+  findPeople(searcItem) {
+    this._as.getRequest(APIEndpoints.SEARCH_USER+this.userId+'/'+searcItem).subscribe(
       response=>{if(response.status == 200)this.peoples = response.result; },
       error => { if (error.status == 401) { localStorage.removeItem('token'); localStorage.removeItem('id'); this._ns.showSnakBar(Constant.TOKEN_EXPIRE, ''); this._router.navigate(['/login']); } else this._ns.showSnakBar(Constant.SERVER_ERROR, ''); });
   }

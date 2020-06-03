@@ -14,8 +14,9 @@ export class APIEndpoints{
     public static REGISTER_USER = APIEndpoints.END_POINT+"/medsol/v1/register";
     public static CREATE_PROFILE = APIEndpoints.END_POINT+"/medsol/v1/profile/create/";
     public static UPLOAD_PROFILE_PICTURE = APIEndpoints.END_POINT+"/medsol/v1/upload/profilePic/";
+    public static UPLOAD_DOCUMENT = APIEndpoints.END_POINT+"/medsol/v1/user/upload/document";
     public static GET_PROFILE_PICTURE=APIEndpoints.END_POINT+"/profilePic/";
-    public static UPDATE_PROFILE_DETAILS = APIEndpoints.END_POINT+"/update/profile/";
+    public static UPDATE_PROFILE_DETAILS = APIEndpoints.END_POINT+"/medsol/v1/update/profile/";
     public static RESET_PASSWORD = APIEndpoints.END_POINT+"/update/password/";
     public static SEARCH_USER = APIEndpoints.END_POINT+"/medsol/v1/user/findBy/"
     public static PROFILE = APIEndpoints.END_POINT+"/medsol/v1/profile/";
@@ -24,6 +25,8 @@ export class APIEndpoints{
     // UPLOAD POST
     public static UPLOAD_POST = APIEndpoints.END_POINT+'/medsol/posts/';
     public static GET_UPLOAD_POST = APIEndpoints.END_POINT+'/medsol/posts/';
+    public static UPDATE_POST = APIEndpoints.END_POINT+'/medsol/posts/post/';
+    public static DELETE_POST = APIEndpoints.END_POINT+'/medsol/posts/';
 
     //FOLLOW CONTROLLER APIS
     public static SUGGETIONS = APIEndpoints.END_POINT+"/user/";
@@ -38,6 +41,13 @@ export class APIEndpoints{
 
     // COMMENT CONTROLLER API
     public static POST_COMMENT = APIEndpoints.END_POINT+"/medsol/comment/create";
+    public static DELETE_COMMENT = APIEndpoints.END_POINT+"/medsol/comment/";
+
+
+    //CHANGE PASSWORD
+    public static SENT_MAIL= APIEndpoints.END_POINT+"/medsol/password/";
+    public static VERIFY_CODE= APIEndpoints.END_POINT+"/medsol/password/verify/";
+    public static CHANGE_PASSWORD= APIEndpoints.END_POINT+"/medsol/password/";
     
 
 }

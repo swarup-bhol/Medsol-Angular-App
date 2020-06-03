@@ -62,3 +62,7 @@ aside .img-fluid {
     max-height: 153px;
     overflow-y:auto;
 }
+.comment-extends{
+    cursor: pointer;
+    color: thistle;
+}

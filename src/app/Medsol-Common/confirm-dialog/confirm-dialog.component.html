@@ -1,1 +1,8 @@
-<p>confirm-dialog works!</p>
+<h4 mat-dialog-title>{{data.title}}</h4>
+<div mat-dialog-content>
+  <p>{{data.message}}</p>
+</div>
+<div mat-dialog-actions>
+    <button class="btn btn-light btn-sm" [mat-dialog-close]="false" >No Thanks</button>
+    <button class="btn btn-primary btn-sm" [mat-dialog-close]="true" cdkFocusInitial>Ok</button>
+  </div>

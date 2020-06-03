@@ -2,10 +2,10 @@
    <div class="container">
       <div class="row">
          <!-- Main Content -->
-         <aside class="col-md-4">
+         <aside class="col-md-4">       
             <div class="mb-3 border rounded bg-white profile-box text-center w-10">
                <div class="box-title border-bottom p-3">
-                  <h6 class="m-0">hange Profile Picture</h6>
+                  <h6 class="m-0">Upload Profile Picture</h6>
                </div>
                <div class="p-4 d-flex align-items-center">
                   <img class="img-fluid rounded-circle" src="http://localhost:8080/api/medsol/v1/profilePic/{{userId}}"
@@ -13,98 +13,33 @@
                   <div class="p-4">
                      <label data-toggle="tooltip" data-placement="top" data-original-title="Upload New Picture"
                         class="btn btn-info m-0" for="fileAttachmentBtn">
-                        <i class="fa fa-picture-o" aria-hidden="true" (click)="fileInput.click()"></i>
-                        <input id="fileAttachmentBtn" name="file-attachment" type="file" class="d-none"
-                           (change)="onFileChanged($event)" #fileInput>
+                        <i class="fa fa-picture-o" aria-hidden="true" (click)="profile.click()"></i>
+                        <input id="fileAttachmentBtn" name="file-attachment" type="file" class="d-none"  (change)="onprofileChange($event)" #profile>
                      </label>
                      <button data-toggle="tooltip" data-placement="top" data-original-title="Delete" type="submit"
                         class="btn btn-danger"><i class="fa fa-trash" aria-hidden="true"></i></button>
                   </div>
                </div>
             </div>
+            <!-- Document Upload -->
             <div class="mb-3 border rounded bg-white profile-box text-center w-10">
                <div class="box-title border-bottom p-3">
-                  <h6 class="m-0"> Document</h6>
+                  <h6 class="m-0">Upload Document<span class="text-danger">*</span></h6>
+                  <span class="text-danger">Please Upload photo of id card</span>
                </div>
                <div class="p-4 d-flex align-items-center">
-                  <img src="./../../../assets/p10.png" class="img-fluid rounded-circle" alt="">
+                  <img class="img-fluid" src="http://localhost:8080/api/medsol/v1/user/document/{{userId}}"
+                           onerror="this.src='./../../../assets/pic.png';" alt="..." />
                   <div class="p-4">
-                     <label data-toggle="tooltip" data-placement="top" data-original-title="Upload New Picture"
-                        class="btn btn-info m-0" for="fileAttachmentBtn">
+                     <label data-toggle="tooltip" data-placement="top" class="btn btn-info m-0" for="fileAttachmentBtn">
                         <i class="fa fa-file-pdf-o" aria-hidden="true" (click)="docsInput.click()"></i>
-                        <input id="fileAttachmentBtn" name="file-attachment" type="file" class="d-none"
-                           (change)="onDocUpload($event)" #docsInput>
+                        <input id="fileAttachmentBtn" name="file-attachment" type="file" class="d-none" (change)="onDocUpload($event)"  #docsInput>
                      </label>
                      <button data-toggle="tooltip" data-placement="top" data-original-title="Delete" type="submit"
-                        class="btn btn-danger"><i class="fa fa-trash" aria-hidden="true"></i></button>
+                        class="btn btn-danger" ><i class="fa fa-trash" aria-hidden="true"></i></button>
                   </div>
                </div>
             </div>
-            <!-- <div class="border rounded bg-white mb-3">
-                <div class="box-title border-bottom p-3">
-                   <h6 class="m-0">About</h6>
-                   <p class="mb-0 mt-0 small">Tell about yourself in two sentences.
-                   </p>
-                </div>
-                <div class="box-body">
-                   <div class="p-3 border-bottom">
-                      <div class="form-group mb-4">
-                         <label class="mb-1">BIO</label>
-                         <div class="position-relative">
-                            <textarea class="form-control" rows="4" name="text" placeholder="Enter Bio">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor :)</textarea>
-                         </div>
-                      </div>
-                      <div class="form-group mb-0">
-                         <label class="mb-1 w-100">SKILLS</label>
-                         <div class="custom-control custom-checkbox d-inline mr-3">
-                            <input type="checkbox" class="custom-control-input" id="customCheck1">
-                            <label class="custom-control-label" for="customCheck1">JavaScript, jQuery</label>
-                         </div>
-                         <div class="custom-control custom-checkbox d-inline">
-                            <input type="checkbox" class="custom-control-input" id="customCheck2">
-                            <label class="custom-control-label" for="customCheck2">HTML5, CSS3</label>
-                         </div>
-                      </div>
-                   </div>
-                   <div class="overflow-hidden text-center p-3">
-                      <a class="font-weight-bold btn btn-light rounded p-3 d-block"> SAVE </a>
-                   </div>
-                </div>
-             </div> -->
-            <!-- <div class="border rounded bg-white mb-3">
-                <div class="box-title border-bottom p-3">
-                   <h6 class="m-0">Social profiles</h6>
-                   <p class="mb-0 mt-0 small">Add elsewhere links to your profile.
-                   </p>
-                </div>
-                <div class="box-body">
-                   <div class="p-3 border-bottom">
-                      <div class="position-relative icon-form-control mb-2">
-                         <i class="feather-instagram position-absolute text-warning"></i>
-                         <input placeholder="Add Instagram link" type="text" class="form-control">
-                      </div>
-                      <div class="position-relative icon-form-control mb-2">
-                         <i class="feather-facebook position-absolute text-primary"></i>
-                         <input placeholder="Add Facebook link" type="text" class="form-control">
-                      </div>
-                      <div class="position-relative icon-form-control mb-2">
-                         <i class="feather-twitter position-absolute text-info"></i>
-                         <input placeholder="Add Twitter link" type="text" class="form-control">
-                      </div>
-                      <div class="position-relative icon-form-control mb-2">
-                         <i class="feather-youtube position-absolute text-danger"></i>
-                         <input placeholder="Add Youtube link" type="text" class="form-control">
-                      </div>
-                      <div class="position-relative icon-form-control mb-0">
-                         <i class="feather-github position-absolute text-dark"></i>
-                         <input placeholder="Add Github link" type="text" class="form-control">
-                      </div>
-                   </div>
-                   <div class="overflow-hidden text-center p-3">
-                      <a class="font-weight-bold btn btn-light rounded p-3 d-block" href="https://askbootstrap.com/preview/osahanin/light/edit-profile.html#"> Update Social Profiles </a>
-                   </div>
-                </div>
-             </div> -->
          </aside>
          <main class="col-md-8">
             <div class="border rounded bg-white mb-3">
@@ -136,7 +71,7 @@
                               <span class="text-danger">*</span>
                            </label>
                            <div class="form-group">
-                              <input type="email" class="form-control" formControlName="email" [disabled]="true">
+                              <input type="email" class="form-control" formControlName="email" >
                            </div>
                            <!-- </div> -->
                         </div>
@@ -150,7 +85,7 @@
                               <span class="text-danger">*</span>
                            </label>
                            <div class="form-group">
-                              <input class="form-control" type="tel" formControlName="mobile" [disabled]="true">
+                              <input class="form-control" type="tel" formControlName="mobileNo" >
                            </div>
                            <!-- </div> -->
                         </div>
@@ -179,7 +114,7 @@
                               <span class="text-danger">*</span>
                            </label>
                            <div class="form-group">
-                              <input class="form-control" formControlName="profession" [disabled]="true">
+                              <input class="form-control" formControlName="profession" >
                            </div>
                            <!-- </div> -->
                         </div>
@@ -192,7 +127,7 @@
                               <span class="text-danger">*</span>
                            </label>
                            <div class="form-group">
-                              <input class="form-control" formControlName="grade" [disabled]="true">
+                              <input class="form-control" formControlName="grade" >
                            </div>
                            <!-- </div> -->
                         </div>
@@ -206,7 +141,7 @@
                               <span class="text-danger">*</span>
                            </label>
                            <div class="form-group">
-                              <input type="text" class="form-control" formControlName="institute">
+                              <input type="text" class="form-control" formControlName="institue">
                            </div>
                            <!-- </div> -->
                         </div>
@@ -222,7 +157,7 @@
                               <span class="text-danger">*</span>
                            </label>
                            <div class="form-group">
-                              <input class="form-control" formControlName="specialization" [disabled]="true">
+                              <input class="form-control" formControlName="specialization" >
                            </div>
                            <!-- </div> -->
                         </div>
@@ -235,7 +170,7 @@
                               <span class="text-danger">*</span>
                            </label>
                            <div class="form-group">
-                              <input class="form-control" formControlName="subspecialization" [disabled]="true">
+                              <input class="form-control" formControlName="subspecialization" >
                            </div>
                            <!-- </div> -->
                         </div>
@@ -243,7 +178,7 @@
                      </div>
                   </form>
                </div>
-               <button type="button" class="btn btn-sm btn-outline-instagram btn-block" (click)="createProfile()">
+               <button type="button" class="btn btn-sm btn-outline-instagram btn-block" (click)="updateProfile()">
                   Update</button>
             </div>
          </main>

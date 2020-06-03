@@ -5,6 +5,8 @@ import { NotificationService } from 'src/app/Medsol-Services/Common/notification
 import { Constant } from 'src/app/Constants/Constant';
 import { ProfileService } from 'src/app/Medsol-Services/Common/profile.service';
 import { Router } from '@angular/router';
+import { MatDialog } from '@angular/material';
+import { ConfirmDialogComponent } from 'src/app/Medsol-Common/confirm-dialog/confirm-dialog.component';
 
 @Component({
   selector: 'app-dash-board',
@@ -13,17 +15,20 @@ import { Router } from '@angular/router';
 })
 export class DashBoardComponent implements OnInit, AfterViewChecked {
   peopleList: [];
-  posts: [any];
+  posts: any[any];
   userId: string;
   profile: any;
   cmtText = '';
+  pageNo = 0;
+  max= 3;
   imgUrl = './../../../assets/pic.png';
   constructor(
     private cdRef: ChangeDetectorRef,
     private _as: APIServiceService,
     private _ns: NotificationService,
     private _ps: ProfileService,
-    private _router: Router
+    private _router: Router,
+    public dialog: MatDialog
   ) { }
 
 
@@ -67,7 +72,7 @@ export class DashBoardComponent implements OnInit, AfterViewChecked {
 
   getFeeds() {
     this._as.getRequest(APIEndpoints.UPLOAD_POST + this.userId + '/feeds/0').subscribe(
-      data => { if (data.status == 200) this.posts = data.result; },
+      data => { if (data.status == 200) this.posts = data.result; console.log(data)},
       error => { if (error.status == 401) this._ns.showSnakBar(Constant.TOKEN_EXPIRE, ''); else this._ns.showSnakBar(Constant.SERVER_ERROR, ''); });
   }
 
@@ -94,6 +99,33 @@ export class DashBoardComponent implements OnInit, AfterViewChecked {
     this._as.putRequest(url, null).subscribe(
       data => { people.following = data.result.following; },
       error => { if (error.status == 401) { localStorage.removeItem('token'); localStorage.removeItem('id'); this._ns.showSnakBar(Constant.TOKEN_EXPIRE, ''); this._router.navigate(['/login']); } else this._ns.showSnakBar(Constant.SERVER_ERROR, ''); });
+  }
+
+  onScroll() {
+    this.cmtText = '';
+    this.pageNo++;
+    this._as.getRequest(APIEndpoints.UPLOAD_POST + this.userId + '/feeds/' + this.pageNo).subscribe(
+      data => { if (data.status == 200) this.posts = this.posts.concat(data.result);  console.log(data.result)},
+      error => { if (error.status == 401) { localStorage.removeItem('token'); localStorage.removeItem('id'); this._ns.showSnakBar(Constant.TOKEN_EXPIRE, ''); this._router.navigate(['/login']); } else this._ns.showSnakBar(Constant.SERVER_ERROR, ''); });
+
+  }
+  deleteComment(comment, commentList,i) {
+    const dialogRef = this.dialog.open(ConfirmDialogComponent, {
+      width: '250px',
+      data: { message: 'Ae you sure want to delete the comment ?', title: 'Delete Comment' }
+    });
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        this._as.deleteRequest(APIEndpoints.DELETE_COMMENT + comment.commentId).subscribe(
+          data => { if (data.status == 200) {
+             commentList.pop(Comment);
+             this.posts[i].commentCount = this.posts[i].commentCount - 1;
+              this._ns.showSnakBar(Constant.DELETED_SUCCESSFULLY, '') 
+            } },
+          error => { if (error.status == 401) this._ns.showSnakBar(Constant.TOKEN_EXPIRE, ''); else this._ns.showSnakBar(Constant.SERVER_ERROR, '') });
+      }
+
+    });
   }
 
 }

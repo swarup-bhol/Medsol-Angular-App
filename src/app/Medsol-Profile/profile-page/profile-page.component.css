@@ -44,7 +44,65 @@
 .post-icons{
     display: flex;
 }
-.comment-height{
-    max-height: 153px;
-    overflow-y:auto;
+.comment-extends{
+    cursor: pointer;
+    color: thistle;
+}
+.show {
+    overflow: visible !important;
+    height: auto !important;
+}
+.edit-comment-inner{
+    background-color: #cec9c9;
+    margin-right: -46%;
+    /* right: 0; */
+    top: 5px;
+    z-index: 9;
+    border: 1px solid #ffffff;
+    width: 80px;
+    height: 55px;
+}
+
+.edit-comment-inner ul li{
+    list-style-type: none;
+    padding-left: 3px;
+    padding-top:7px;
+}
+
+.edit-comment-inner ul li a{
+   cursor: pointer;
+}
+
+.edit-comment-inner ul li:hover{
+   background-color: silver;
+}
+
+.edit-comment-inner ul{
+    padding-left: unset;
+}
+.osahan-nav-top .osahan-list-dropdown .nav-link .badge {
+    position: absolute;
+    border-radius: 50px;
+    min-width: 15px;
+    height: 15px;
+    font-size: 9px;
+    padding: 0px;
+    right: 1px;
+    line-height: 15px;
+    top: 11px;
+}
+
+.mat-menu-panel {
+    /* min-width: 95px; */
+    /* max-width: 336px; */
+    overflow: auto;
+    -webkit-overflow-scrolling: touch;
+    /* max-height: calc(100vh - 48px); */
+    border-radius: 4px;
+    /* outline: 0; */
+    /* min-height: 49px; */
+}
+.mat-menu-content:not(:empty) {
+    padding-top: 0px;
+    padding-bottom: 0px;
 }

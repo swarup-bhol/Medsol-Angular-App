@@ -4,6 +4,7 @@ import { NotificationService } from './Medsol-Services/Common/notification.servi
 import { APIEndpoints } from './Constants/APIEndpoints';
 import { Constant } from './Constants/Constant';
 import { Router } from '@angular/router';
+import { LoaderService } from './Medsol-Services/Common/loader.service';
 
 @Component({
   selector: 'app-root',
@@ -19,18 +20,20 @@ export class AppComponent implements OnInit {
   searchText = '';
 
   isSerched: boolean;
+  loader: any;
 
   constructor(
     private _as: APIServiceService,
     private _ns: NotificationService,
-    private _router: Router
+    private _router: Router,
+    private _ls:LoaderService
   ) { }
 
   ngOnInit(): void {
     this.userId = localStorage.getItem('id');
     if (this.userId != null)
       this.getProfileInfo();
-    console.log(this.userId)
+    this._ls.loader.subscribe(data=>{this.loader = data})
   }
 
   getProfileInfo() {
@@ -41,11 +44,12 @@ export class AppComponent implements OnInit {
   logout() {
     localStorage.clear();
     this._router.navigate(['/login']);
+    location.reload();
   }
 
   searchItem() {
     if (this.searchText == '') this._ns.showSnakBar(Constant.INPUT_REQUIRED, '')
     this._router.navigate(['search',this.searchText]);
-    location.reload();
+    
   }
 }

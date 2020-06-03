@@ -5,33 +5,28 @@
          <aside class="col col-xl-3 order-xl-1 col-lg-12 order-lg-1 col-12">
             <div class="box mb-3 shadow-sm border rounded bg-white profile-box text-center">
                <div class="px-3 border-bottom">
-                  <img class="img-fluid mt-2 rounded-circle" alt="Responsive image"
+                  <!-- py-4  -->
+                  <img class="img-fluid mt-2 rounded-circle"
                      src="http://localhost:8080/api/medsol/v1/profilePic/{{userId}}"
-                     onerror="this.src='./../../../assets/pic.png';" alt="..." />
-                  <!-- <img src="./../../../assets/img.jpg" class="img-fluid mt-2 rounded-circle" alt="Responsive image"> -->
+                     onerror="this.src='./../../../assets/pic.png';" alt="Responsive image" />
                   <h5 class="font-weight-bold text-dark mb-1 mt-4">{{profile?.fullName}}</h5>
                   <p class="mb-0 text-muted">{{profile?.profession}}, {{profile?.institute}}</p>
                </div>
                <div class="d-flex">
                   <div class="col-6 border-right p-3">
-                     <h6 class="font-weight-bold text-dark mb-1" >{{profile?.follower}}</h6>
+                     <a class="font-weight-bold p-3 d-block">
+                        <h6 class="font-weight-bold text-dark mb-1">{{profile?.follower}}</h6>
+                     </a>
                      <p class="mb-0 text-black-50 small">Followings</p>
                   </div>
                   <div class="col-6 p-3">
-                     <h6 class="font-weight-bold text-dark mb-1">{{profile?.following}}</h6>
+                     <a class="font-weight-bold p-3 d-block">
+                        <h6 class="font-weight-bold text-dark mb-1">{{profile?.following}}</h6>
+                     </a>
                      <p class="mb-0 text-black-50 small">Followers</p>
                   </div>
                </div>
-               <div class="overflow-hidden border-top" *ngIf="currentUser == userId">
-                  <a class="font-weight-bold p-3 d-block" (click)="logout()" style="color:#007bff;cursor: pointer;"> Log
-                     Out </a>
-               </div>
-               <div class="overflow-hidden border-top" *ngIf="currentUser != userId && following">
-                  <a class="font-weight-bold p-3 d-block" style="color:#007bff;cursor: pointer;"> Follow </a>
-               </div>
-               <div class="overflow-hidden border-top" *ngIf="currentUser != userId && following">
-                  <a class="font-weight-bold p-3 d-block" style="color:#007bff;cursor: pointer;"> Following </a>
-               </div>
+
             </div>
 
             <div class="box shadow-sm border rounded bg-white mb-3">
@@ -113,7 +108,14 @@
                         <div class="text-truncate">{{post.fullName}}</div>
                         <div class="small text-gray-500">{{post.profession}},{{post.instituteName}}</div>
                      </div>
-                     <span class="ml-auto small">3 hours</span>
+                     <span [matMenuTriggerFor]="menu" class="ml-auto material-icons" style="cursor: pointer;"
+                        *ngIf="userId == currentUser">
+                        more_horiz
+                     </span>
+                     <mat-menu #menu="matMenu">
+                        <button mat-menu-item (click)="editPost(post)">Edit</button>
+                        <button mat-menu-item (click)="deletePost(post.post,i)">Delete</button>
+                     </mat-menu>
                   </div>
                   <!-- post Content -->
                   <div class="p-3 border-bottom osahan-post-body">
@@ -133,9 +135,10 @@
                      <div class="mr-3 text-secondary"><i class="fa fa-share-square-o" aria-hidden="true"></i></div>
                   </div>
                   <!-- comment lists  -->
-                  <div class="p-3  align-items-top border-bottom osahan-post-comment comment-height"
+                  <div class="p-3  align-items-top border-bottom osahan-post-comment  comment-height"
                      *ngIf="post.commentCount != 0">
-                     <div class="d-flex align-items-top osahan-post-comment" *ngFor="let item of post.commentLIst">
+                     <div class="d-flex align-items-top osahan-post-comment"
+                        *ngFor="let item of post.commentLIst | slice:0:[max]">
                         <div class="dropdown-list-image cmt-img">
                            <img class="rounded-circle"
                               src="http://localhost:8080/api/medsol/v1/profilePic/{{item.userId}}"
@@ -143,15 +146,19 @@
                            <div class="status-indicator bg-success mo-3"></div>
                         </div>
                         <div class="font-weight-bold" style="margin-left: -0.9rem;">
-                           <div class="text-truncate cmt-name"> {{item.userName}}
-                              <span class="float-right ml-auto small"><i class="fa fa-heart" aria-hidden="true"
-                                    style="color: red;"></i></span>
-                              <span class="float-right ml-auto small"></span>
-                           </div>
+                           <div class="text-truncate cmt-name"> {{item.userName}}</div>
                            <div class="small text-gray-500">{{item.commentedText}}</div>
-
                         </div>
+                        <span [matMenuTriggerFor]="menu1" class="ml-auto material-icons" style="cursor: pointer;"
+                           *ngIf="userId == currentUser">
+                           more_horiz
+                        </span>
+                        <mat-menu #menu1="matMenu">
+                           <button mat-menu-item (click)="deleteComment(item,post.commentLIst)">Delete</button>
+                        </mat-menu>
                      </div>
+                     <a (click)="max = post.commentLIst.length" *ngIf="max != post.commentLIst.length"
+                        class="comment-extends">show more</a>
                   </div>
                   <div class="p-3">
                      <textarea placeholder="Add Comment..." class="form-control border-0 p-0 shadow-none" rows="1"
@@ -159,7 +166,7 @@
                   </div>
                </div>
             </div>
-            
+
          </main>
 
          <aside class="col col-xl-3 order-xl-3 col-lg-12 order-lg-3 col-12">
@@ -188,32 +195,7 @@
                   </div>
                </div>
             </div>
-            <!-- <div class="box shadow-sm border rounded bg-white mb-3">
-               <div class="box-title border-bottom p-3" style="display: flex;">
-                  <h6 class="m-0">People You May know</h6>
-                  <a class="ml-auto" href="">See All <i class="fa fa-chevron-right" aria-hidden="true"></i></a>
-               </div>
-               <div class="box-body p-3">
-                  <div class="d-flex align-items-center osahan-post-header mb-3 people-list"
-                     *ngFor="let people of peoples">
-                     <div class="dropdown-list-image mr-3" [routerLink]="['/profile',people.userId]">
-                        <img class="rounded-circle"
-                           src="http://localhost:8080/api/medsol/v1/profilePic/{{people.userId}}"
-                           onerror="this.src='./../../../assets/pic.png';" alt="..." />
-                        <div class="status-indicator bg-success"></div>
-                     </div>
-                     <div class="font-weight-bold mr-2">
-                        <div class="text-truncate" [routerLink]="['/profile',people.userId]">{{people.userName}}</div>
-                        <div class="small text-gray-500">{{people.profession}},{{people.institute}}</div>
-                     </div>
-                     <span class="ml-auto"><button type="button"
-                           class="btn btn-sm btn-outline-instagram btn-block sugg-btn"
-                           *ngIf="! people.following">Follow</button></span>
-                     <span class="ml-auto" *ngIf="ds"><button type="button" class="btn btn-sm btn-block sugg-btn"
-                           *ngIf="people.following">Following</button></span>
-                  </div>
-               </div>
-            </div> -->
+
 
          </aside>
       </div>
