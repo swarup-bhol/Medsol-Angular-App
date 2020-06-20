@@ -198,3 +198,10 @@ img {
 .outer-search-div .triangle{
     top:39px;
 }
+.notification-list{
+ cursor: pointer;
+ background-color: whitesmoke;
+ border-bottom: solid 2px white;
+ min-height: 30px;
+ padding: 10px;
+}

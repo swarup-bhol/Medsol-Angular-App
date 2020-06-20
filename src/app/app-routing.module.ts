@@ -12,6 +12,7 @@ import { ProfileInfoComponent } from './Medsol-Form/profile-info/profile-info.co
 import { LoginGuard } from './Medsol-Services/Guard/login.guard';
 import { AuthGuard } from './Medsol-Services/Guard/auth.guard';
 import { SearchPeopleComponent } from './Medsol-Dashboard/search-people/search-people.component';
+import { PostNotificationComponent } from './Medsol-Dashboard/post-notification/post-notification.component';
 
 
 const routes: Routes = [
@@ -23,6 +24,7 @@ const routes: Routes = [
   { path: "", component: DashBoardComponent, canActivate: [AuthGuard] },
   { path: "peoples/:type", component: PeopleListComponent, canActivate: [AuthGuard] },
   { path: "search/:query", component: SearchPeopleComponent, canActivate: [AuthGuard] },
+  { path: "post/:id", component: PostNotificationComponent, canActivate: [AuthGuard] },
   { path: "profile-info/:id/:name/:mobile/:email", component: ProfileInfoComponent, canActivate: [LoginGuard] },
   { path: '404', component: PageNotFoundComponent },
   { path: '**', redirectTo: '/404' }

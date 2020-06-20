@@ -32,6 +32,7 @@ import { MatListModule } from '@angular/material/list';
 import { DialogComponent } from './Medsol-Common/dialog/dialog.component';
 import {MatDialogModule} from '@angular/material/dialog';
 import { EditPostComponent } from './Medsol-Dashboard/edit-post/edit-post.component';
+import { PostNotificationComponent } from './Medsol-Dashboard/post-notification/post-notification.component';
 
 @NgModule({
   declarations: [
@@ -50,7 +51,8 @@ import { EditPostComponent } from './Medsol-Dashboard/edit-post/edit-post.compon
     NewPostComponent,
     SearchPeopleComponent,
     DialogComponent,
-    EditPostComponent
+    EditPostComponent,
+    PostNotificationComponent
   ],
   imports: [
     BrowserModule,

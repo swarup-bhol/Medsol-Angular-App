@@ -15,10 +15,10 @@
                         <div class="status-indicator bg-success"></div>
                      </div>
                      <div class="font-weight-bold">
-                        <div class="text-truncate">{{post.fullName}}</div>
+                        <div class="text-truncate name-crusor" [routerLink]="['/profile',post.userId]">{{post.fullName}}</div>
                         <div class="small text-gray-500">{{post.profession}},{{post.instituteName}}</div>
                      </div>
-                     <span class="ml-auto small">3 hours</span>
+                     <span class="ml-auto small">{{timeDifference(post.post.postUploadTime)}}</span>
                   </div>
                   <!-- post Content -->
                   <div class="p-3 border-bottom osahan-post-body">
@@ -40,7 +40,7 @@
                   <!-- comment lists  -->
                   <div class="p-3  align-items-top border-bottom osahan-post-comment" *ngIf="post.commentCount != 0">
                      <div class="d-flex align-items-top osahan-post-comment"
-                        *ngFor="let item of post.commentLIst | slice:0:[max]">
+                        *ngFor="let item of post.commentLIst | slice:0:[max],let j=index">
                         <div class="dropdown-list-image cmt-img">
                            <img class="rounded-circle"
                               src="http://localhost:8080/api/medsol/v1/profilePic/{{item.userId}}"
@@ -48,20 +48,56 @@
                            <div class="status-indicator bg-success mo-3"></div>
                         </div>
                         <div class="font-weight-bold" style="margin-left: -0.9rem; width: 100%;">
-                           <div class="text-truncate cmt-name"> {{item.userName}}</div>
-                           <div class="small text-gray-500">{{item.commentedText}}</div>
-                           <span [matMenuTriggerFor]="menu1" class="material-icons" style="cursor: pointer; float: right;"
-                           *ngIf="userId == item.userId">
-                           more_horiz
-                        </span>
-                        <mat-menu #menu1="matMenu">
-                           <button mat-menu-item (click)="deleteComment(item,post.commentLIst,i)">Delete</button>
-                        </mat-menu>
-                        </div>
-                     </div>
-                     <a (click)="max = post.commentLIst.length" *ngIf="max != post.commentLIst.length"
-                        class="comment-extends">show more</a>
+                           <div class="text-truncate cmt-name"> {{item.userName}}</div><span [matMenuTriggerFor]="menu1"
+                              class="material-icons" style="cursor: pointer; float: right;"
+                              *ngIf="userId == item.userId">
+                              more_horiz
+                           </span>
+                           <div class="small">{{item.commentedText}}</div>
+                           <div class="row">      
+                              <div class="small cmt-like-div" *ngIf="! item.like" (click)="clickCommentLike(i,j,0,item.commentId,'comment')">Like</div>
+                              <div class="small cmt-like-div" *ngIf="item.like" (click)="clickCommentUnLike(i,j,k,item.commentId,'comment')"><strong style="color: royalblue;">Liked</strong></div>
+                              <span class="small" *ngIf="item.likeCount != 0">{{item.likeCount}}</span>
+                              <div class="small cmt-replay-div" (click)="replay = 'replay'+item.commentId">Replay</div>
+                              <mat-menu #menu1="matMenu">
+                                 <button mat-menu-item (click)="deleteComment(item,post.commentLIst,i)">Delete</button>
+                              </mat-menu>
+                           </div>
+                           <div class="d-flex align-items-top osahan-post-comment" *ngFor="let reply of item.replays | slice:0:[reMax],let k=index">
+                              <div class="dropdown-list-image cmt-img">
+                                 <img class="rounded-circle"
+                                    src="http://localhost:8080/api/medsol/v1/profilePic/{{reply.userId}}" onerror="this.src='./../../../assets/pic.png';" alt="..." />
+                                 <div class="status-indicator bg-success mo-3"></div>
+                              </div>
+                              <div class="font-weight-bold" style="margin-left: -0.9rem; width: 100%;">
+                                 <div class="text-truncate cmt-name"> {{reply.userName}}</div><span  [matMenuTriggerFor]="menu2" class="material-icons"  style="cursor: pointer; float: right;" *ngIf="userId == reply.userId"> more_horiz </span>
+                                 <div class="small text-gray-500">{{reply.commentedText}}</div>
+                                 <div class="row">
+                                    <div class="small cmt-like-div"  *ngIf="! reply.like" (click)="clickCommentLike(i,j,k,reply.commentId,'replay')">Like</div>
+                                    <div class="small cmt-like-div" *ngIf="reply.like" (click)="clickCommentUnLike(i,j,k,reply.commentId,'replay')"><strong style="color: royalblue;">Liked</strong></div>
+                                    <span class="small" *ngIf="item.likeCount != 0">{{item.likeCount}}</span>
+                                    <div class="small cmt-replay-div" (click)="replay = 'replay'+item.commentId">Replay</div>
+                                    <mat-menu #menu2="matMenu">
+                                       <button mat-menu-item
+                                          (click)="deleteReComment(reply,item.replays,j)">Delete</button>
+                                    </mat-menu>
+                                 </div>
+                              </div>
+                           </div>
+                           <a (click)="reMax = item.replays.length" *ngIf="('replayCmt'+item.commentId ) != replayCmt && item.replays.length !=0 && item.replays.length!= reMax"
+                              class="comment-extends">View {{item.replays.length}} Replay</a>
 
+                           <div class="small" *ngIf="('replay'+item.commentId ) == replay">
+                              <textarea placeholder="Replay..." class="form-control small shadow-none" rows="1"
+                                 style="font-size: 12px;" (keypress)="replayComment($event,item,repText,i,j)"
+                                 [(ngModel)]="repText"></textarea>
+                           </div>
+                        </div>
+
+                     </div>
+                     <a (click)="max = post.commentLIst.length"
+                        *ngIf="max !< post.commentLIst.length || max != post.commentLIst.length "
+                        class="comment-extends">show more</a>
                   </div>
                   <div class="p-3">
                      <textarea placeholder="Add Comment..." class="form-control border-0 p-0 shadow-none" rows="1"
@@ -82,13 +118,13 @@
                </div>
                <div class="d-flex">
                   <div class="col-6 border-right p-3">
-                     <a [routerLink]="['/peoples','follower']" class="font-weight-bold p-3 d-block">
+                     <a [routerLink]="['/peoples/follower']" class="font-weight-bold p-3 d-block">
                         <h6 class="font-weight-bold text-dark mb-1">{{profile?.follower}}</h6>
                      </a>
                      <p class="mb-0 text-black-50 small">Followings</p>
                   </div>
                   <div class="col-6 p-3">
-                     <a [routerLink]="['/peoples','followings']" class="font-weight-bold p-3 d-block">
+                     <a [routerLink]="['/peoples/followings']" class="font-weight-bold p-3 d-block">
                         <h6 class="font-weight-bold text-dark mb-1">{{profile?.following}}</h6>
                      </a>
                      <p class="mb-0 text-black-50 small">Followers</p>

@@ -19,9 +19,14 @@ export class DashBoardComponent implements OnInit, AfterViewChecked {
   userId: string;
   profile: any;
   cmtText = '';
+  repText = '';
   pageNo = 0;
-  max= 3;
+  max = 3;
+  reMax = 0;
   imgUrl = './../../../assets/pic.png';
+   monthNames = ["January", "February", "March", "April", "May", "June",
+  "July", "August", "September", "October", "November", "December"
+];
   constructor(
     private cdRef: ChangeDetectorRef,
     private _as: APIServiceService,
@@ -41,6 +46,7 @@ export class DashBoardComponent implements OnInit, AfterViewChecked {
     this.getFeeds();
     this.getProfileInfo();
     this.getSuggetions();
+    console.log(new Date().getMonth +" "+ new Date().getDate +" "+ new Date().getFullYear)
   }
 
   clickComment(event, postId, message, i) {
@@ -49,8 +55,28 @@ export class DashBoardComponent implements OnInit, AfterViewChecked {
       if (message == '') { this._ns.showSnakBar(Constant.INPUT_REQUIRED, ''); return }
       var comment = { "userId": this.userId, "postId": postId, "message": message };
       this._as.postRequest(APIEndpoints.POST_COMMENT, comment).subscribe(
-        data => { if (data.status == 200) { this.posts[i].commentLIst.unshift(data.result); this.posts[i].commentCount = this.posts[i].commentCount + 1; } this.cmtText = ''; },
+        data => {
+          if (data.status == 200) {
+            this.posts[i].commentLIst.unshift(data.result);
+            this.posts[i].commentCount = this.posts[i].commentCount + 1;
+          } this.cmtText = '';
+        },
         error => { this._ns.showSnakBar(Constant.SERVER_ERROR, ''); this.cmtText = ''; });
+    }
+  }
+  replayComment(event, item, message, postIndex, commentIndex) {
+    if (event.keyCode == 13 && event.code) {
+      event.preventDefault();
+      if (message == '') { this._ns.showSnakBar(Constant.INPUT_REQUIRED, ''); return }
+      var comment = { "userId": this.userId, "commentId": item.commentId, "commentedText": message };
+      this._as.postRequest(APIEndpoints.POST_RECOMMENT, comment).subscribe(
+        data => {
+          if (data.status == 200) {
+            this.posts[postIndex].commentLIst[commentIndex].replays.unshift(data.result);
+          }
+          this.repText = '';
+        },
+        error => { this._ns.showSnakBar(Constant.SERVER_ERROR, ''); this.repText = ''; });
     }
   }
 
@@ -70,9 +96,37 @@ export class DashBoardComponent implements OnInit, AfterViewChecked {
       error => { if (error.status == 401) this._ns.showSnakBar(Constant.TOKEN_EXPIRE, ''); else this._ns.showSnakBar(Constant.SERVER_ERROR, '') });
   }
 
+  clickCommentLike(postIndex,commentIndex,replayCommentIndex,commentId,type){
+    if(type == 'comment'){
+      this.posts[postIndex].commentLIst[commentIndex].like = true;
+      this.posts[postIndex].commentLIst[commentIndex].likeCount += 1;
+    }
+    if(type == 'replay'){
+      this.posts[postIndex].commentLIst[commentIndex].replays[replayCommentIndex].like = true;
+      this.posts[postIndex].commentLIst[commentIndex].replays[replayCommentIndex].likeCount += 1;
+    }
+    console.log(commentId)
+    this._as.postRequest(APIEndpoints.COMMENT_LIKE+commentId+"/"+this.userId,null).subscribe(
+      data => { if (data == 200) { } },
+      error => { if (error.status == 401) this._ns.showSnakBar(Constant.TOKEN_EXPIRE, ''); else this._ns.showSnakBar(Constant.SERVER_ERROR, '') });
+  }
+  clickCommentUnLike(postIndex,commentIndex,replayCommentIndex,commentId,type){
+    if(type == 'comment'){
+      this.posts[postIndex].commentLIst[commentIndex].like = false;
+      this.posts[postIndex].commentLIst[commentIndex].likeCount -= 1;
+    }
+    if(type == 'replay'){
+      this.posts[postIndex].commentLIst[commentIndex].replays[replayCommentIndex].like = false;
+      this.posts[postIndex].commentLIst[commentIndex].replays[replayCommentIndex].likeCount -= 1;
+    }
+    this._as.putRequest(APIEndpoints.COMMENT_UNLIKE+commentId+"/"+this.userId,null).subscribe(
+      data => { if (data == 200) { } },
+      error => { if (error.status == 401) this._ns.showSnakBar(Constant.TOKEN_EXPIRE, ''); else this._ns.showSnakBar(Constant.SERVER_ERROR, '') });
+  }
+
   getFeeds() {
     this._as.getRequest(APIEndpoints.UPLOAD_POST + this.userId + '/feeds/0').subscribe(
-      data => { if (data.status == 200) this.posts = data.result; console.log(data)},
+      data => { if (data.status == 200) this.posts = data.result; console.log(data) },
       error => { if (error.status == 401) this._ns.showSnakBar(Constant.TOKEN_EXPIRE, ''); else this._ns.showSnakBar(Constant.SERVER_ERROR, ''); });
   }
 
@@ -105,11 +159,11 @@ export class DashBoardComponent implements OnInit, AfterViewChecked {
     this.cmtText = '';
     this.pageNo++;
     this._as.getRequest(APIEndpoints.UPLOAD_POST + this.userId + '/feeds/' + this.pageNo).subscribe(
-      data => { if (data.status == 200) this.posts = this.posts.concat(data.result);  console.log(data.result)},
+      data => { if (data.status == 200) this.posts = this.posts.concat(data.result); console.log(data.result) },
       error => { if (error.status == 401) { localStorage.removeItem('token'); localStorage.removeItem('id'); this._ns.showSnakBar(Constant.TOKEN_EXPIRE, ''); this._router.navigate(['/login']); } else this._ns.showSnakBar(Constant.SERVER_ERROR, ''); });
 
   }
-  deleteComment(comment, commentList,i) {
+  deleteComment(comment, commentList, i) {
     const dialogRef = this.dialog.open(ConfirmDialogComponent, {
       width: '250px',
       data: { message: 'Ae you sure want to delete the comment ?', title: 'Delete Comment' }
@@ -117,15 +171,64 @@ export class DashBoardComponent implements OnInit, AfterViewChecked {
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
         this._as.deleteRequest(APIEndpoints.DELETE_COMMENT + comment.commentId).subscribe(
-          data => { if (data.status == 200) {
-             commentList.pop(Comment);
-             this.posts[i].commentCount = this.posts[i].commentCount - 1;
-              this._ns.showSnakBar(Constant.DELETED_SUCCESSFULLY, '') 
-            } },
+          data => {
+            if (data.status == 200) {
+              commentList.pop(Comment);
+              this.posts[i].commentCount = this.posts[i].commentCount - 1;
+              this._ns.showSnakBar(Constant.DELETED_SUCCESSFULLY, '')
+            }
+          },
           error => { if (error.status == 401) this._ns.showSnakBar(Constant.TOKEN_EXPIRE, ''); else this._ns.showSnakBar(Constant.SERVER_ERROR, '') });
       }
 
     });
   }
+  deleteReComment(replay, replayList, j) {
+    const dialogRef = this.dialog.open(ConfirmDialogComponent, {
+      width: '250px',
+      data: { message: 'Ae you sure want to delete the comment ?', title: 'Delete Comment' }
+    });
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        this._as.deleteRequest(APIEndpoints.DELETE_RECOMMENT + replay.commentId).subscribe(
+          data => {
+            if (data.status == 200) {
+              replayList.pop(replay)
+              this._ns.showSnakBar(Constant.DELETED_SUCCESSFULLY, '')
+            }
+          },
+          error => { if (error.status == 401) this._ns.showSnakBar(Constant.TOKEN_EXPIRE, ''); else this._ns.showSnakBar(Constant.SERVER_ERROR, '') });
+      }
 
+    });
+
+
+  }
+
+  timeDifference(date) {
+    var myDate = new Date(date);
+    var difference = new Date().getTime() - myDate.getTime();
+
+    var daysDifference = Math.floor(difference / 1000 / 60 / 60 / 24);
+    difference -= daysDifference * 1000 * 60 * 60 * 24
+
+    var hoursDifference = Math.floor(difference / 1000 / 60 / 60);
+    difference -= hoursDifference * 1000 * 60 * 60
+
+    var minutesDifference = Math.floor(difference / 1000 / 60);
+    difference -= minutesDifference * 1000 * 60
+
+    var secondsDifference = Math.floor(difference / 1000);
+
+
+    if (daysDifference == 0 && hoursDifference == 0 && minutesDifference == 0) {
+      return secondsDifference + " sec"
+    } else if (daysDifference == 0 && hoursDifference == 0 && minutesDifference != 0) {
+      return minutesDifference + " min"
+    } else if (daysDifference == 0 && hoursDifference != 0) {
+      return hoursDifference + " hr"
+    } else {
+      return this.monthNames[myDate.getUTCMonth()] +" "+ myDate.getDate() +" "+ myDate.getFullYear();
+    }
+  }
 }

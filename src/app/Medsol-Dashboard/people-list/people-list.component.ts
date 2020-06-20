@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { APIEndpoints } from 'src/app/Constants/APIEndpoints';
 import { APIServiceService } from 'src/app/Medsol-Services/apiservice.service';
 import { NotificationService } from 'src/app/Medsol-Services/Common/notification.service';
@@ -13,7 +13,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 export class PeopleListComponent implements OnInit {
   peopleList: any[any];
   userId;
-  profile: any;
+  profile;
 
   peoples: any;
   pageNo = 0;
@@ -22,6 +22,7 @@ export class PeopleListComponent implements OnInit {
 
   constructor(
     private _as: APIServiceService,
+    private cdRef: ChangeDetectorRef,
     private _ns: NotificationService,
     private _router: Router,
     private _route: ActivatedRoute
@@ -29,7 +30,7 @@ export class PeopleListComponent implements OnInit {
 
   ngOnInit() {
     this.userId = localStorage.getItem('id');
-    // this.type = this._route.snapshot.paramMap.get('type');
+    this.getProfileInfo();
     this._route.params.subscribe(params => {
       const term = params['type'];
       if (term == 'suggetions') {
@@ -41,7 +42,9 @@ export class PeopleListComponent implements OnInit {
       } else { this._router.navigate(['/404']); }
     });
   }
-
+  ngAfterViewChecked(): void {
+    this.cdRef.detectChanges();
+  }
   getProfileInfo() {
     this._as.getRequest(APIEndpoints.PROFILE + this.userId).subscribe(
       response => { if (response.status == 200) this.profile = response.result; },

@@ -5,6 +5,8 @@ import { APIEndpoints } from './Constants/APIEndpoints';
 import { Constant } from './Constants/Constant';
 import { Router } from '@angular/router';
 import { LoaderService } from './Medsol-Services/Common/loader.service';
+import { error } from 'protractor';
+import { interval, Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-root',
@@ -12,7 +14,7 @@ import { LoaderService } from './Medsol-Services/Common/loader.service';
   styleUrls: ['./app.component.css']
 })
 export class AppComponent implements OnInit {
-
+  subscription: Subscription;
   userId;
   search = "";
   title = 'Medsol';
@@ -21,20 +23,35 @@ export class AppComponent implements OnInit {
 
   isSerched: boolean;
   loader: any;
+  notification: any[any];
+  newNotification = [];
+  pageNo = 0;
 
   constructor(
     private _as: APIServiceService,
     private _ns: NotificationService,
     private _router: Router,
-    private _ls:LoaderService
+    private _ls: LoaderService
   ) { }
 
   ngOnInit(): void {
+    this._ls.loader.subscribe(data => { this.loader = data })
+    const source = interval(10000 * 60 * 60);
+    const text = 'Your Text Here';
     this.userId = localStorage.getItem('id');
-    if (this.userId != null)
+    if (this.userId != null) {
       this.getProfileInfo();
-    this._ls.loader.subscribe(data=>{this.loader = data})
+      this.getOldNotification();
+      this.subscription = source.subscribe(val => this.getNotification());
+    }
+
+
+   
+   
   }
+
+
+
 
   getProfileInfo() {
     this._as.getRequest(APIEndpoints.PROFILE + this.userId).subscribe(
@@ -49,7 +66,23 @@ export class AppComponent implements OnInit {
 
   searchItem() {
     if (this.searchText == '') this._ns.showSnakBar(Constant.INPUT_REQUIRED, '')
-    this._router.navigate(['search',this.searchText]);
-    
+    this._router.navigate(['search', this.searchText]);
+
+  }
+
+  getNotification() {
+    this._as.getRequest(APIEndpoints.GET_NOTIFICATION + this.userId).subscribe(
+      response => { if (response.status == 200) { this.newNotification = response.result; console.log(response) } },
+      error => { if (error.status == 401) { localStorage.removeItem('token'); localStorage.removeItem('id'); this._ns.showSnakBar(Constant.TOKEN_EXPIRE, ''); this._router.navigate(['/login']); } else this._ns.showSnakBar(Constant.SERVER_ERROR, ''); });
+  }
+  getOldNotification() {
+    this._as.getRequest(APIEndpoints.GET_OLD_NOTIFICATION + this.userId + "/" + this.pageNo).subscribe(
+      response => { if (response.status == 200) { this.notification = response.result; console.log(response); this.pageNo++ } },
+      error => { if (error.status == 401) { localStorage.removeItem('token'); localStorage.removeItem('id'); this._ns.showSnakBar(Constant.TOKEN_EXPIRE, ''); this._router.navigate(['/login']); } else this._ns.showSnakBar(Constant.SERVER_ERROR, ''); });
+  }
+  getMoreNotification() {
+    this._as.getRequest(APIEndpoints.GET_OLD_NOTIFICATION + this.userId + "/" + this.pageNo).subscribe(
+      response => { if (response.status == 200) { this.notification.unshift(response.result); console.log(response); this.pageNo++ } },
+      error => { if (error.status == 401) { localStorage.removeItem('token'); localStorage.removeItem('id'); this._ns.showSnakBar(Constant.TOKEN_EXPIRE, ''); this._router.navigate(['/login']); } else this._ns.showSnakBar(Constant.SERVER_ERROR, ''); });
   }
 }

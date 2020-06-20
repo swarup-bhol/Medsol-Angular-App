@@ -1,92 +1,103 @@
-
 <mat-progress-bar mode="indeterminate" *ngIf="loader"></mat-progress-bar>
 
-<nav class="navbar navbar-expand navbar-dark bg-dark osahan-nav-top p-0" style="height: 55px;" *ngIf ="userId != null">
-  <div class="container">
-     <a class="navbar-brand mr-2" [routerLink]="['']"><img src="./../assets/1200x630wa.png" height="10px" width="30px"></a>
-     <div class="d-none d-sm-inline-block form-inline mr-auto my-2 my-md-0 mw-100 navbar-search" >
-        <div class="input-group">
-           <input type="text" class="form-control shadow-none border-0" placeholder="Search ..." aria-label="Search" aria-describedby="basic-addon2" [(ngModel)]="searchText">
-           <div class="input-group-append">
-              <button class="btn" type="button" (click)="searchItem()">
-               <i class="fa fa-search"></i>
-              </button>
-           </div>
-        </div>
+<nav class="navbar navbar-expand navbar-dark bg-dark osahan-nav-top p-0" style="height: 55px;" *ngIf="userId != null">
+   <div class="container">
+      <a class="navbar-brand mr-2" [routerLink]="['']"><img src="./../assets/1200x630wa.png" height="10px"
+            width="30px"></a>
+      <div class="d-none d-sm-inline-block form-inline mr-auto my-2 my-md-0 mw-100 navbar-search">
+         <div class="input-group">
+            <input type="text" class="form-control shadow-none border-0" placeholder="Search ..." aria-label="Search"
+               aria-describedby="basic-addon2" [(ngModel)]="searchText">
+            <div class="input-group-append">
+               <button class="btn" type="button" (click)="searchItem()">
+                  <i class="fa fa-search"></i>
+               </button>
+            </div>
+         </div>
       </div>
-     <ul class="navbar-nav ml-auto d-flex align-items-center">
-        <!-- Nav Item - Search Dropdown (Visible Only XS) -->
-        <li class="nav-item dropdown no-arrow d-sm-none">
-           <a class="nav-link dropdown-toggle" id="searchDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-            <i class="fa fa-search"></i>
-           </a>
-           <!-- Dropdown - Messages -->
-           <div class="dropdown-menu dropdown-menu-right p-3 shadow-sm animated--grow-in" aria-labelledby="searchDropdown">
-              <!-- <form class="form-inline mr-auto w-100 navbar-search"> -->
-                 <div class="input-group">
-                    <input type="text" class="form-control border-0 shadow-none" placeholder="Search people..." aria-label="Search" aria-describedby="basic-addon2" [(ngModel)]="searchText">
-                    <div class="input-group-append">
-                       <button class="btn" type="button" (click)="searchItem()">
+      <ul class="navbar-nav ml-auto d-flex align-items-center">
+         <!-- Nav Item - Search Dropdown (Visible Only XS) -->
+         <li class="nav-item dropdown no-arrow d-sm-none">
+            <a class="nav-link dropdown-toggle" id="searchDropdown" role="button" data-toggle="dropdown"
+               aria-haspopup="true" aria-expanded="false">
+               <i class="fa fa-search"></i>
+            </a>
+            <!-- Dropdown - Messages -->
+            <div class="dropdown-menu dropdown-menu-right p-3 shadow-sm animated--grow-in"
+               aria-labelledby="searchDropdown">
+               <!-- <form class="form-inline mr-auto w-100 navbar-search"> -->
+               <div class="input-group">
+                  <input type="text" class="form-control border-0 shadow-none" placeholder="Search people..."
+                     aria-label="Search" aria-describedby="basic-addon2" [(ngModel)]="searchText">
+                  <div class="input-group-append">
+                     <button class="btn" type="button" (click)="searchItem()">
                         <i class="fa fa-search"></i>
-                       </button>
-                    </div>
-                 </div>
-              <!-- </form> -->
-           </div>
-        </li>
-        
-        <li class="nav-item dropdown no-arrow mx-1 osahan-list-dropdown">
-           <a class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-            <i class="fa fa-envelope-o" aria-hidden="true"></i>
-              <!-- Counter - Alerts -->
-              <span class="badge badge-danger badge-counter">8</span>
-           </a>
-           <!-- Dropdown - Alerts -->
-           <div class="dropdown-list dropdown-menu dropdown-menu-right shadow-sm">
-              Messages are
-           </div>
-        </li>
-        <li class="nav-item dropdown no-arrow mx-1 osahan-list-dropdown">
-           <a class="nav-link dropdown-toggle"  role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-            <i class="fa fa-bell" aria-hidden="true"></i>
-              <!-- Counter - Alerts -->
-              <span class="badge badge-info badge-counter">6</span>
-           </a>
-           <!-- Dropdown - Alerts -->
-           <div class="dropdown-list dropdown-menu dropdown-menu-right shadow-sm">
-             2nd drop down
-           </div>
-        </li>
-        <!-- Nav Item - User Information -->
-        <li class="nav-item dropdown no-arrow ml-1 osahan-profile-dropdown">
-           <a class="nav-link dropdown-toggle pr-0"  role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-            <img class="img-profile rounded-circle"
-            src="http://localhost:8080/api/medsol/v1/profilePic/{{userId}}"
-            onerror="this.src='./../../../assets/pic.png';" alt="..." />
-           </a>
-           <!-- Dropdown - User Information -->
-           <div class="dropdown-menu dropdown-menu-right shadow-sm">
-              <div class="p-3 d-flex align-items-center">
-                 <div class="dropdown-list-image mr-3">
-                  <img class="rounded-circle"
-                  src="http://localhost:8080/api/medsol/v1/profilePic/{{userId}}"
+                     </button>
+                  </div>
+               </div>
+               <!-- </form> -->
+            </div>
+         </li>
+
+         <!-- <li class="nav-item dropdown no-arrow mx-1 osahan-list-dropdown">
+            <a class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true"
+               aria-expanded="false">
+               <i class="fa fa-envelope-o" aria-hidden="true"></i>
+               <span class="badge badge-danger badge-counter">8</span>
+            </a>
+            <div class="dropdown-list dropdown-menu dropdown-menu-right shadow-sm">
+               Messages are
+            </div>
+         </li> -->
+         <li class="nav-item dropdown no-arrow mx-1 osahan-list-dropdown">
+            <a class="nav-link dropdown-toggle" role="button" data-toggle="dropdown" aria-haspopup="true"
+               aria-expanded="false">
+               <i class="fa fa-bell" aria-hidden="true"></i>
+               <!-- Counter - Alerts -->
+               <span class="badge badge-info badge-counter" *ngIf="newNotification.length != 0">{{newNotification.length}}</span>
+            </a>
+            <!-- Dropdown - Alerts -->
+            <div class="dropdown-list dropdown-menu dropdown-menu-right shadow-sm">
+               <div *ngFor="let note of notification" [routerLink]="['/post',note.postId]">
+                  <div class="row notification-list" >
+                     <div class="col-sm-9 col-lg-9 col-md-9"><strong>{{note.userName}} </strong>  <strong *ngIf="note.recordCount-1 != 0">and {{note.recordCount-1}} other<span></span></strong> {{note.notificatonType}} your <strong>Post.</strong></div>
+                     <div class="col-sm-3 col-lg-3 col-md-3"><img src="http://localhost:8080/api/medsol/posts/img/{{note.postId}}" height="30px" width="30px"
+                        alt="image"></div>
+                  </div>
+               </div>
+            </div>
+         </li>
+         <!-- Nav Item - User Information -->
+         <li class="nav-item dropdown no-arrow ml-1 osahan-profile-dropdown">
+            <a class="nav-link dropdown-toggle pr-0" role="button" data-toggle="dropdown" aria-haspopup="true"
+               aria-expanded="false">
+               <img class="img-profile rounded-circle" src="http://localhost:8080/api/medsol/v1/profilePic/{{userId}}"
                   onerror="this.src='./../../../assets/pic.png';" alt="..." />
-                    <div class="status-indicator bg-success"></div>
-                 </div>
-                 <div class="font-weight-bold">
-                    <div class="text-truncate">{{profile?.fullName}}</div>
-                    <div class="small text-gray-500">{{profile?.profession}}, {{profile?.institute}}</div>
-                 </div>
-              </div>
-              <div class="dropdown-divider"></div>
-              <a class="dropdown-item" [routerLink]="['/profile',profile?.userId]"><i class="fa fa-pencil-square-o" aria-hidden="true"></i> My Account</a>
-              <a class="dropdown-item" [routerLink]="['/edit-profile']"><i class="fa fa-user-o" aria-hidden="true"></i> Edit Profile</a>
-              <div class="dropdown-divider"></div>
-              <a class="dropdown-item" (click)="logout()"><i class="fa fa-sign-out" aria-hidden="true"></i> Logout</a>
-           </div>
-        </li>
-     </ul>
-  </div>
+            </a>
+            <!-- Dropdown - User Information -->
+            <div class="dropdown-menu dropdown-menu-right shadow-sm">
+               <div class="p-3 d-flex align-items-center">
+                  <div class="dropdown-list-image mr-3">
+                     <img class="rounded-circle" src="http://localhost:8080/api/medsol/v1/profilePic/{{userId}}"
+                        onerror="this.src='./../../../assets/pic.png';" alt="..." />
+                     <div class="status-indicator bg-success"></div>
+                  </div>
+                  <div class="font-weight-bold">
+                     <div class="text-truncate">{{profile?.fullName}}</div>
+                     <div class="small text-gray-500">{{profile?.profession}}, {{profile?.institute}}</div>
+                  </div>
+               </div>
+               <div class="dropdown-divider"></div>
+               <a class="dropdown-item" [routerLink]="['/profile',profile?.userId]"><i class="fa fa-pencil-square-o"
+                     aria-hidden="true"></i> My Account</a>
+               <a class="dropdown-item" [routerLink]="['/edit-profile']"><i class="fa fa-user-o" aria-hidden="true"></i>
+                  Edit Profile</a>
+               <div class="dropdown-divider"></div>
+               <a class="dropdown-item" (click)="logout()"><i class="fa fa-sign-out" aria-hidden="true"></i> Logout</a>
+            </div>
+         </li>
+      </ul>
+   </div>
 </nav>
 
 <router-outlet></router-outlet>

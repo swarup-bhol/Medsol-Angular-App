@@ -66,3 +66,14 @@ aside .img-fluid {
     cursor: pointer;
     color: thistle;
 }
+.cmt-like-div {
+    margin-left: 3%;
+    cursor: pointer;
+}
+.cmt-replay-div{
+    margin-left: 2%;
+    cursor: pointer;
+}
+.name-crusor{
+    cursor: pointer;
+}
