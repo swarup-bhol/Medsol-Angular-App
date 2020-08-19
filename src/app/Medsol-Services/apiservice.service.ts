@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { PostNotificationComponent } from '../Medsol-Dashboard/post-notification/post-notification.component';
 
 @Injectable({
   providedIn: 'root'

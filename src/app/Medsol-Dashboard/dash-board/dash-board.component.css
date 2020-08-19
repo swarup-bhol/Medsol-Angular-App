@@ -2,10 +2,12 @@
     height: 2.5rem;
     width: 2.5rem;
 }
+
 img {
     vertical-align: middle;
     border-style: none;
 }
+
 .rounded-circle {
     border-radius: 50%!important;
 }
@@ -16,29 +18,35 @@ img {
     border: 2px solid #fff;
     margin: 0 0 0 -9px;
 }
+
 .job-item-header .img-fluid, .job-item-2 .img-fluid {
     width: 40px;
     height: 40px;
 }
+
 aside .img-fluid {
     max-width: 50%;
     height: auto;
 }
+
 .btn-outline-follow {
     border-color: #2a5b83;
     background-color: #2a5b83;
     color: #fff;
 }
+
 .btn-outline-following {
     border-color: #dee2e6;
     background-color: #dee2e6;
     color: #101010;
 }
-.cmt-img img{
+
+.cmt-img img {
     height: 1.2rem;
     width: 1.2rem;
 }
-.cmt-img .status-indicator{
+
+.cmt-img .status-indicator {
     height: .55rem;
     width: .55rem;
     border-radius: 100%;
@@ -46,34 +54,118 @@ aside .img-fluid {
     top: 30%;
     right: 0;
 }
-.mo-3{
+
+.mo-3 {
     margin-right: 1rem!important
 }
-.cmt-name{
+
+.cmt-name {
     font-size: 11px;
 }
-.sugg-btn{
+
+.sugg-btn {
     font-size: 10px;
 }
-.post-icons{
+
+.post-icons {
     display: flex;
 }
-.comment-height{
+
+.comment-height {
     max-height: 153px;
-    overflow-y:auto;
+    overflow-y: auto;
 }
-.comment-extends{
+
+.comment-extends {
     cursor: pointer;
     color: thistle;
 }
+
 .cmt-like-div {
     margin-left: 3%;
     cursor: pointer;
 }
-.cmt-replay-div{
+
+.cmt-replay-div {
     margin-left: 2%;
     cursor: pointer;
 }
-.name-crusor{
+
+.name-crusor {
     cursor: pointer;
+}
+
+.post-type {
+    max-height: 300px;
+    overflow-y: scroll;
+    margin-top: 14px;
+}
+
+.check-container {
+    margin-left: 10px;
+  display: block;
+  position: relative;
+  padding-left: 35px;
+  margin-bottom: 12px;
+  cursor: pointer;
+  font-size: 14px;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+/* Hide the browser's default checkbox */
+.check-container input {
+  position: absolute;
+  opacity: 0;
+  cursor: pointer;
+  height: 0;
+  width: 0;
+}
+
+/* Create a custom checkbox */
+.checkmark {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 20px;
+  width: 20px;
+  background-color: white;
+  border: 2px solid #2196F3 ;
+}
+
+/* On mouse-over, add a grey background color */
+.check-container:hover input ~ .checkmark {
+  background-color: #ccc;
+}
+
+/* When the checkbox is checked, add a blue background */
+.check-container input:checked ~ .checkmark {
+  background-color: #2196F3;
+}
+
+/* Create the checkmark/indicator (hidden when not checked) */
+.checkmark:after {
+  content: "";
+  position: absolute;
+  display: none;
+}
+
+/* Show the checkmark when checked */
+.check-container input:checked ~ .checkmark:after {
+  display: block;
+}
+
+/* Style the checkmark/indicator */
+.check-container .checkmark:after {
+  left: 9px;
+  top: 5px;
+  width: 5px;
+  height: 10px;
+  border: solid white;
+  border-width: 0 3px 3px 0;
+  -webkit-transform: rotate(45deg);
+  -ms-transform: rotate(45deg);
+  transform: rotate(45deg);
 }

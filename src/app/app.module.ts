@@ -33,6 +33,9 @@ import { DialogComponent } from './Medsol-Common/dialog/dialog.component';
 import {MatDialogModule} from '@angular/material/dialog';
 import { EditPostComponent } from './Medsol-Dashboard/edit-post/edit-post.component';
 import { PostNotificationComponent } from './Medsol-Dashboard/post-notification/post-notification.component';
+import { MatVideoModule } from 'mat-video';
+import { NgMultiSelectDropDownModule } from 'ng-multiselect-dropdown';
+
 
 @NgModule({
   declarations: [
@@ -67,8 +70,10 @@ import { PostNotificationComponent } from './Medsol-Dashboard/post-notification/
     MatSnackBarModule,
     MatMenuModule,
     MatIconModule,
+    NgMultiSelectDropDownModule.forRoot(),
     MatListModule,
-    MatDialogModule
+    MatDialogModule,
+    MatVideoModule
   ],
   providers: [
     {

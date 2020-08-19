@@ -15,7 +15,9 @@
                         <div class="status-indicator bg-success"></div>
                      </div>
                      <div class="font-weight-bold">
-                        <div class="text-truncate name-crusor" [routerLink]="['/profile',post.userId]">{{post.fullName}}</div>
+                        <div *ngIf="post.fullName != null" class="text-truncate name-crusor"
+                           [routerLink]="['/profile',post.userId]">{{post.fullName}}
+                        </div>
                         <div class="small text-gray-500">{{post.profession}},{{post.instituteName}}</div>
                      </div>
                      <span class="ml-auto small">{{timeDifference(post.post.postUploadTime)}}</span>
@@ -25,6 +27,15 @@
                      <p>{{post.post.postContent}}</p>
                      <img src="http://localhost:8080/api/medsol/posts/img/{{post.post.postId}}" class="img-fluid"
                         alt="Responsive image" *ngIf="post.post.postImgPath !=null">
+
+
+                     <video id="video" width="100%" controls *ngIf="post.post.postVideoPath !=null">
+                        <source src="http://localhost:8080/api/medsol/posts/video/{{post.post.postId}}"
+                           type="video/mp4">
+                     </video>
+
+                     <!-- <mat-video #video *ngIf="post.post.postVideoPath !=null" src="http://localhost:8080/api/medsol/posts/video/{{post.post.postId}}" type="video/mp4" [autoplay]="true" [preload]="true" [fullscreen]="true" [download]="false" color="accent" >
+                         </mat-video> -->
                   </div>
                   <!-- post like icons  -->
                   <div class="p-3 border-bottom osahan-post-footer post-icons">
@@ -54,29 +65,41 @@
                               more_horiz
                            </span>
                            <div class="small">{{item.commentedText}}</div>
-                           <div class="row">      
-                              <div class="small cmt-like-div" *ngIf="! item.like" (click)="clickCommentLike(i,j,0,item.commentId,'comment')">Like</div>
-                              <div class="small cmt-like-div" *ngIf="item.like" (click)="clickCommentUnLike(i,j,k,item.commentId,'comment')"><strong style="color: royalblue;">Liked</strong></div>
+                           <div class="row">
+                              <div class="small cmt-like-div" *ngIf="! item.like"
+                                 (click)="clickCommentLike(i,j,0,item.commentId,'comment')">Like</div>
+                              <div class="small cmt-like-div" *ngIf="item.like"
+                                 (click)="clickCommentUnLike(i,j,k,item.commentId,'comment')"><strong
+                                    style="color: royalblue;">Liked</strong></div>
                               <span class="small" *ngIf="item.likeCount != 0">{{item.likeCount}}</span>
                               <div class="small cmt-replay-div" (click)="replay = 'replay'+item.commentId">Replay</div>
                               <mat-menu #menu1="matMenu">
                                  <button mat-menu-item (click)="deleteComment(item,post.commentLIst,i)">Delete</button>
                               </mat-menu>
                            </div>
-                           <div class="d-flex align-items-top osahan-post-comment" *ngFor="let reply of item.replays | slice:0:[reMax],let k=index">
+                           <div class="d-flex align-items-top osahan-post-comment"
+                              *ngFor="let reply of item.replays | slice:0:[reMax],let k=index">
                               <div class="dropdown-list-image cmt-img">
                                  <img class="rounded-circle"
-                                    src="http://localhost:8080/api/medsol/v1/profilePic/{{reply.userId}}" onerror="this.src='./../../../assets/pic.png';" alt="..." />
+                                    src="http://localhost:8080/api/medsol/v1/profilePic/{{reply.userId}}"
+                                    onerror="this.src='./../../../assets/pic.png';" alt="..." />
                                  <div class="status-indicator bg-success mo-3"></div>
                               </div>
                               <div class="font-weight-bold" style="margin-left: -0.9rem; width: 100%;">
-                                 <div class="text-truncate cmt-name"> {{reply.userName}}</div><span  [matMenuTriggerFor]="menu2" class="material-icons"  style="cursor: pointer; float: right;" *ngIf="userId == reply.userId"> more_horiz </span>
+                                 <div class="text-truncate cmt-name"> {{reply.userName}}</div>
                                  <div class="small text-gray-500">{{reply.commentedText}}</div>
+                                 <span [matMenuTriggerFor]="menu2" class="material-icons"
+                                    style="cursor: pointer; float: right;" *ngIf="userId == reply.userId"> more_horiz
+                                 </span>
                                  <div class="row">
-                                    <div class="small cmt-like-div"  *ngIf="! reply.like" (click)="clickCommentLike(i,j,k,reply.commentId,'replay')">Like</div>
-                                    <div class="small cmt-like-div" *ngIf="reply.like" (click)="clickCommentUnLike(i,j,k,reply.commentId,'replay')"><strong style="color: royalblue;">Liked</strong></div>
+                                    <div class="small cmt-like-div" *ngIf="! reply.like"
+                                       (click)="clickCommentLike(i,j,k,reply.commentId,'replay')">Like</div>
+                                    <div class="small cmt-like-div" *ngIf="reply.like"
+                                       (click)="clickCommentUnLike(i,j,k,reply.commentId,'replay')"><strong
+                                          style="color: royalblue;">Liked</strong></div>
                                     <span class="small" *ngIf="item.likeCount != 0">{{item.likeCount}}</span>
-                                    <div class="small cmt-replay-div" (click)="replay = 'replay'+item.commentId">Replay</div>
+                                    <div class="small cmt-replay-div" (click)="replay = 'replay'+item.commentId">Replay
+                                    </div>
                                     <mat-menu #menu2="matMenu">
                                        <button mat-menu-item
                                           (click)="deleteReComment(reply,item.replays,j)">Delete</button>
@@ -84,7 +107,8 @@
                                  </div>
                               </div>
                            </div>
-                           <a (click)="reMax = item.replays.length" *ngIf="('replayCmt'+item.commentId ) != replayCmt && item.replays.length !=0 && item.replays.length!= reMax"
+                           <a (click)="reMax = item.replays.length"
+                              *ngIf="('replayCmt'+item.commentId ) != replayCmt && item.replays.length !=0 && item.replays.length!= reMax"
                               class="comment-extends">View {{item.replays.length}} Replay</a>
 
                            <div class="small" *ngIf="('replay'+item.commentId ) == replay">
@@ -107,7 +131,7 @@
             </div>
          </main>
          <aside class="col col-xl-3 order-xl-1 col-lg-6 order-lg-2 col-md-6 col-sm-6 col-12">
-            <div class="box mb-3 shadow-sm border rounded bg-white profile-box text-center">
+            <div class="box mb-3 shadow-sm border rounded bg-white profile-box text-center ">
                <div class="px-3 border-bottom">
                   <!-- py-4  -->
                   <img class="img-fluid mt-2 rounded-circle"
@@ -135,9 +159,23 @@
                   </a>
                </div>
             </div>
-            <div class="box mb-3 shadow-sm rounded bg-white view-box overflow-hidden">
+            <div class="box mb-3 shadow-sm rounded bg-white view-box overflow-hidden post-type">
                <div class="box-title border-bottom p-3">
-                  <h6 class="m-0">Profile Views</h6>
+                  <h6 class="m-0">View Related Post</h6>
+               </div>
+               <div class="post-type">
+                  <form [formGroup]="form" (ngSubmit)="submitForm()" novalidate>
+                     <label class="check-container">All
+                        <input type="checkbox" checked="checked" [value]="all" (change)="onCheckboxChange($event)" #checkBox>
+                        <span class="checkmark"></span>
+                     </label>
+                     <div *ngFor="let data of dropdownList; let i=index">
+                        <label class="check-container">{{data.specializationName}}
+                           <input type="checkbox" [value]="data.specializationId" (change)="onCheckboxChange($event)" #checkboxes>
+                           <span class="checkmark"></span>
+                        </label>
+                     </div>
+                  </form>
                </div>
                <div class="d-flex text-center">
                   <div class="col-6 border-right  px-2">
@@ -152,7 +190,7 @@
                   </div>
                </div>
                <div class="overflow-hidden border-top text-center">
-                  <img src="./../../../assets/chart.png" class="img-fluid" alt="Responsive image">
+
                </div>
             </div>
 
@@ -167,14 +205,16 @@
                <div class="box-body p-3">
                   <div class="d-flex align-items-center osahan-post-header mb-3 people-list"
                      *ngFor="let people of peopleList">
-                     <div class="dropdown-list-image mr-3" [routerLink]="['/profile',people.userId]">
+                     <div *ngIf="people.userId != null" class="dropdown-list-image mr-3"
+                        [routerLink]="['/profile',people.userId]">
                         <img class="rounded-circle"
                            src="http://localhost:8080/api/medsol/v1/profilePic/{{people.userId}}"
                            onerror="this.src='./../../../assets/pic.png';" alt="..." />
                         <div class="status-indicator bg-success"></div>
                      </div>
                      <div class="font-weight-bold mr-2">
-                        <div class="text-truncate" [routerLink]="['/profile',people.userId]">{{people.userName}}</div>
+                        <div *ngIf="people.userName != null" class="text-truncate"
+                           [routerLink]="['/profile',people.userId]">{{people.userName}}</div>
                         <div class="small text-gray-500">{{people.profession}},{{people.institute}}</div>
                      </div>
                      <span class="ml-auto"><button type="button" class="btn btn-primary btn-sm btn-block sugg-btn"

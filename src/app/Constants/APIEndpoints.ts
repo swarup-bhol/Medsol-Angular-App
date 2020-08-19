@@ -7,6 +7,7 @@ export class APIEndpoints {
   public static ALL_PROFESSION = APIEndpoints.END_POINT + '/medsol/profile/profession/all';
   public static GRADE_BY_PROFESSION = APIEndpoints.END_POINT + '/medsol/profile/grade/';
   public static ALL_SPECIALIZATION = APIEndpoints.END_POINT + '/medsol/profile/spec/all';
+  public static SPECIALIZATION_BY_USER = APIEndpoints.END_POINT + '/medsol/profile/spec/';
   public static SUB_SPEC_BY_SPEC = APIEndpoints.END_POINT + '/medsol/profile/subSpec/';
 
   //USER CONTROLLER APIS
@@ -24,6 +25,7 @@ export class APIEndpoints {
 
   // UPLOAD POST
   public static UPLOAD_POST = APIEndpoints.END_POINT + '/medsol/posts/';
+  public static POST_LIST_BY_TYPE = APIEndpoints.END_POINT + '/medsol/posts/feeds/';
   public static GET_UPLOAD_POST = APIEndpoints.END_POINT + '/medsol/posts/';
   public static UPDATE_POST = APIEndpoints.END_POINT + '/medsol/posts/post/';
   public static DELETE_POST = APIEndpoints.END_POINT + '/medsol/posts/';

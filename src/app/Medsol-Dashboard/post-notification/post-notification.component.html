@@ -37,7 +37,7 @@
                       <div class="mr-3 text-secondary"><i class="fa fa-share-square-o" aria-hidden="true"></i></div>
                    </div>
                    <!-- comment lists  -->
-                   <div class="p-3  align-items-top border-bottom osahan-post-comment" *ngIf="post?.commentCount != 0">
+                   <div class="p-3  align-items-top border-bottom osahan-post-comment " *ngIf="post?.commentCount != 0">
                       <div class="d-flex align-items-top osahan-post-comment"
                          *ngFor="let item of post?.commentLIst | slice:0:[max],let j=index">
                          <div class="dropdown-list-image cmt-img">

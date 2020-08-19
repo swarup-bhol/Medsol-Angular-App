@@ -54,15 +54,21 @@
                aria-expanded="false">
                <i class="fa fa-bell" aria-hidden="true"></i>
                <!-- Counter - Alerts -->
-               <span class="badge badge-info badge-counter" *ngIf="newNotification.length != 0">{{newNotification.length}}</span>
+               <span class="badge badge-info badge-counter"
+                  *ngIf="notificationCount!= 0">{{notificationCount}}</span>
             </a>
             <!-- Dropdown - Alerts -->
-            <div class="dropdown-list dropdown-menu dropdown-menu-right shadow-sm">
-               <div *ngFor="let note of notification" [routerLink]="['/post',note.postId]">
-                  <div class="row notification-list" >
-                     <div class="col-sm-9 col-lg-9 col-md-9"><strong>{{note.userName}} </strong>  <strong *ngIf="note.recordCount-1 != 0">and {{note.recordCount-1}} other<span></span></strong> {{note.notificatonType}} your <strong>Post.</strong></div>
-                     <div class="col-sm-3 col-lg-3 col-md-3"><img src="http://localhost:8080/api/medsol/posts/img/{{note.postId}}" height="30px" width="30px"
-                        alt="image"></div>
+            <div class="dropdown-list dropdown-menu dropdown-menu-right shadow-sm coment-div">
+               <div *ngFor="let notification of notifications">
+                  <div [routerLink]="['/post',notification?.postId]">
+                     <div class="row notification-list">
+                        <div class="col-sm-9 col-lg-9 col-md-9"><strong>{{notification.userName}} </strong> <strong
+                              *ngIf="notification.recordCount-1 != 0">and {{notification.recordCount-1}} other<span></span></strong>
+                           {{notification.notificatonType}} your <strong>Post.</strong></div>
+                        <div class="col-sm-3 col-lg-3 col-md-3"><img
+                              src="http://localhost:8080/api/medsol/posts/img/{{notification.postId}}" height="30px"
+                              width="30px" alt="image"></div>
+                     </div>
                   </div>
                </div>
             </div>
@@ -88,9 +94,10 @@
                   </div>
                </div>
                <div class="dropdown-divider"></div>
-               <a class="dropdown-item" [routerLink]="['/profile',profile?.userId]"><i class="fa fa-pencil-square-o"
-                     aria-hidden="true"></i> My Account</a>
-               <a class="dropdown-item" [routerLink]="['/edit-profile']"><i class="fa fa-user-o" aria-hidden="true"></i>
+               <a class="dropdown-item" *ngIf="profile.userId != null" [routerLink]="['/profile',profile?.userId]"><i
+                     class="fa fa-pencil-square-o" aria-hidden="true"></i> My Account</a>
+               <a class="dropdown-item" *ngIf="profile.userId != null" [routerLink]="['/edit-profile']"><i
+                     class="fa fa-user-o" aria-hidden="true"></i>
                   Edit Profile</a>
                <div class="dropdown-divider"></div>
                <a class="dropdown-item" (click)="logout()"><i class="fa fa-sign-out" aria-hidden="true"></i> Logout</a>

@@ -1,4 +1,4 @@
-import { Component, OnInit, ChangeDetectorRef, AfterViewChecked } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef, AfterViewChecked, ViewChild, ElementRef, Renderer2, ViewChildren, QueryList } from '@angular/core';
 import { APIServiceService } from 'src/app/Medsol-Services/apiservice.service';
 import { APIEndpoints } from 'src/app/Constants/APIEndpoints';
 import { NotificationService } from 'src/app/Medsol-Services/Common/notification.service';
@@ -7,6 +7,11 @@ import { ProfileService } from 'src/app/Medsol-Services/Common/profile.service';
 import { Router } from '@angular/router';
 import { MatDialog } from '@angular/material';
 import { ConfirmDialogComponent } from 'src/app/Medsol-Common/confirm-dialog/confirm-dialog.component';
+import { MatVideoComponent } from 'mat-video/lib/video.component';
+import * as $ from 'jquery';
+import { IDropdownSettings } from 'ng-multiselect-dropdown';
+import 'is-in-viewport';
+import { FormArray, FormControl, FormGroup, FormBuilder } from '@angular/forms';
 
 @Component({
   selector: 'app-dash-board',
@@ -14,6 +19,8 @@ import { ConfirmDialogComponent } from 'src/app/Medsol-Common/confirm-dialog/con
   styleUrls: ['./dash-board.component.css']
 })
 export class DashBoardComponent implements OnInit, AfterViewChecked {
+  @ViewChild('video', { static: false }) matVideo: MatVideoComponent;
+  video: HTMLVideoElement;
   peopleList: [];
   posts: any[any];
   userId: string;
@@ -24,31 +31,108 @@ export class DashBoardComponent implements OnInit, AfterViewChecked {
   max = 3;
   reMax = 0;
   imgUrl = './../../../assets/pic.png';
-   monthNames = ["January", "February", "March", "April", "May", "June",
-  "July", "August", "September", "October", "November", "December"
-];
+  monthNames = ["January", "February", "March", "April", "May", "June",
+    "July", "August", "September", "October", "November", "December"
+  ];
+  dropdownList = [];
+  selectedItems = [];
+  dropdownSettings: IDropdownSettings = {};
+  form: FormGroup;
+
+
   constructor(
+    private fb: FormBuilder,
     private cdRef: ChangeDetectorRef,
     private _as: APIServiceService,
     private _ns: NotificationService,
     private _ps: ProfileService,
     private _router: Router,
-    public dialog: MatDialog
-  ) { }
+    public dialog: MatDialog,
+    private renderer: Renderer2,
+    private elementRef: ElementRef
+  ) {
+    this.form = this.fb.group({
+      checkArray: this.fb.array([])
+    })
+  }
 
+
+  @ViewChild('videoPlayer', { static: false }) videoplayer: ElementRef;
+  @ViewChild("checkBox", { static: false }) checkBox: ElementRef;
+  @ViewChildren("checkboxes") checkboxes: QueryList<ElementRef>;
+
+  toggleVideo(event: any) {
+    this.videoplayer.nativeElement.play();
+  }
 
   ngAfterViewChecked(): void {
     this.cdRef.detectChanges();
+    window.addEventListener('scroll', this.checkScroll, false);
+    window.addEventListener('resize', this.checkScroll, false);
   }
 
   ngOnInit() {
+
     this.userId = localStorage.getItem('id');
     this.getFeeds();
     this.getProfileInfo();
     this.getSuggetions();
-    console.log(new Date().getMonth +" "+ new Date().getDate +" "+ new Date().getFullYear)
-  }
+    this.getAllSpecialization();
+    this.getUserSpecialization();
+    this.dropdownSettings = {
+      singleSelection: false,
+      idField: 'specializationId',
+      textField: 'specializationName',
+      selectAllText: 'Select All',
+      unSelectAllText: 'UnSelect All',
+      itemsShowLimit: 3,
+      allowSearchFilter: true
+    };
+    // this.video = this.matVideo.getVideoTag();
 
+  }
+  /**
+   * @author swarup
+   * @param e 
+   */
+  onCheckboxChange(e) {
+    const checkArray: FormArray = this.form.get('checkArray') as FormArray;
+    if (e.target.value == 'on') {
+      this.checkboxes.forEach((element) => {
+        element.nativeElement.checked = false;
+      });
+      checkArray.clear();
+      this.getFeeds();
+      return;
+    } else {
+      this.checkBox.nativeElement.checked = false;
+    }
+    if (e.target.checked) {
+      checkArray.push(new FormControl(e.target.value));
+      this._as.getRequest(APIEndpoints.POST_LIST_BY_TYPE + this.userId + '/bySpec/0?specList='+checkArray.value.toString()).subscribe(
+        data => { 
+          if (data.status == 200) this.posts = data.result; },
+        error => { 
+          if (error.status == 401) this._ns.showSnakBar(Constant.TOKEN_EXPIRE, ''); else this._ns.showSnakBar(Constant.SERVER_ERROR, ''); });
+    } else {
+      let i: number = 0;
+      checkArray.controls.forEach((item: FormControl) => {
+        if (item.value == e.target.value) {
+          checkArray.removeAt(i);
+          return;
+        }
+        i++;
+      });
+    }
+  }
+  /**
+   * @author Swarup
+   * 
+   * @param event 
+   * @param postId 
+   * @param message 
+   * @param i 
+   */
   clickComment(event, postId, message, i) {
     if (event.keyCode == 13 && event.code) {
       event.preventDefault();
@@ -64,6 +148,15 @@ export class DashBoardComponent implements OnInit, AfterViewChecked {
         error => { this._ns.showSnakBar(Constant.SERVER_ERROR, ''); this.cmtText = ''; });
     }
   }
+  /**
+   * @author swarup
+   * 
+   * @param event 
+   * @param item 
+   * @param message 
+   * @param postIndex 
+   * @param commentIndex 
+   */
   replayComment(event, item, message, postIndex, commentIndex) {
     if (event.keyCode == 13 && event.code) {
       event.preventDefault();
@@ -80,6 +173,14 @@ export class DashBoardComponent implements OnInit, AfterViewChecked {
     }
   }
 
+  /**
+   * @author swarup
+   * 
+   * @param postId 
+   * @param i 
+   * 
+   * @returns 
+   */
   clickLike(postId, i) {
     this.posts[i].like = true;
     this.posts[i].likeCount = this.posts[i].likeCount + 1;
@@ -88,6 +189,14 @@ export class DashBoardComponent implements OnInit, AfterViewChecked {
       error => { if (error.status == 401) { this._ns.showSnakBar(Constant.TOKEN_EXPIRE, '') } else { this._ns.showSnakBar(Constant.SERVER_ERROR, '') } });
   }
 
+  /**
+   * @author Swarup
+   * 
+   * @param postId 
+   * @param i 
+   * 
+   * @returns object
+   */
   clickUnLike(postId, i) {
     this.posts[i].like = false;
     this.posts[i].likeCount = this.posts[i].likeCount - 1;
@@ -96,51 +205,97 @@ export class DashBoardComponent implements OnInit, AfterViewChecked {
       error => { if (error.status == 401) this._ns.showSnakBar(Constant.TOKEN_EXPIRE, ''); else this._ns.showSnakBar(Constant.SERVER_ERROR, '') });
   }
 
-  clickCommentLike(postIndex,commentIndex,replayCommentIndex,commentId,type){
-    if(type == 'comment'){
+  /**
+   * @author swarup
+   * 
+   * @param postIndex 
+   * @param commentIndex 
+   * @param replayCommentIndex 
+   * @param commentId 
+   * @param type 
+   * 
+   * @return object
+   */
+  clickCommentLike(postIndex, commentIndex, replayCommentIndex, commentId, type) {
+    if (type == 'comment') {
       this.posts[postIndex].commentLIst[commentIndex].like = true;
       this.posts[postIndex].commentLIst[commentIndex].likeCount += 1;
     }
-    if(type == 'replay'){
+    if (type == 'replay') {
       this.posts[postIndex].commentLIst[commentIndex].replays[replayCommentIndex].like = true;
       this.posts[postIndex].commentLIst[commentIndex].replays[replayCommentIndex].likeCount += 1;
     }
-    console.log(commentId)
-    this._as.postRequest(APIEndpoints.COMMENT_LIKE+commentId+"/"+this.userId,null).subscribe(
+    this._as.postRequest(APIEndpoints.COMMENT_LIKE + commentId + "/" + this.userId, null).subscribe(
       data => { if (data == 200) { } },
       error => { if (error.status == 401) this._ns.showSnakBar(Constant.TOKEN_EXPIRE, ''); else this._ns.showSnakBar(Constant.SERVER_ERROR, '') });
   }
-  clickCommentUnLike(postIndex,commentIndex,replayCommentIndex,commentId,type){
-    if(type == 'comment'){
+  /**
+   * @author swarup
+   * 
+   * @param postIndex 
+   * @param commentIndex 
+   * @param replayCommentIndex 
+   * @param commentId 
+   * @param type 
+   * 
+   * @retuen object
+   */
+  clickCommentUnLike(postIndex, commentIndex, replayCommentIndex, commentId, type) {
+    if (type == 'comment') {
       this.posts[postIndex].commentLIst[commentIndex].like = false;
       this.posts[postIndex].commentLIst[commentIndex].likeCount -= 1;
     }
-    if(type == 'replay'){
+    if (type == 'replay') {
       this.posts[postIndex].commentLIst[commentIndex].replays[replayCommentIndex].like = false;
       this.posts[postIndex].commentLIst[commentIndex].replays[replayCommentIndex].likeCount -= 1;
     }
-    this._as.putRequest(APIEndpoints.COMMENT_UNLIKE+commentId+"/"+this.userId,null).subscribe(
+    this._as.putRequest(APIEndpoints.COMMENT_UNLIKE + commentId + "/" + this.userId, null).subscribe(
       data => { if (data == 200) { } },
       error => { if (error.status == 401) this._ns.showSnakBar(Constant.TOKEN_EXPIRE, ''); else this._ns.showSnakBar(Constant.SERVER_ERROR, '') });
   }
 
+  /**
+   * 
+   * @author swarup
+   * 
+   * @return post lists for all type
+   */
   getFeeds() {
     this._as.getRequest(APIEndpoints.UPLOAD_POST + this.userId + '/feeds/0').subscribe(
-      data => { if (data.status == 200) this.posts = data.result; console.log(data) },
+      data => { if (data.status == 200) this.posts = data.result; },
       error => { if (error.status == 401) this._ns.showSnakBar(Constant.TOKEN_EXPIRE, ''); else this._ns.showSnakBar(Constant.SERVER_ERROR, ''); });
   }
 
+  /**
+   * @author swarup
+   * 
+   * @return return profile details object
+   */
   getProfileInfo() {
     this._as.getRequest(APIEndpoints.PROFILE + this.userId).subscribe(response => { if (response.status == 200) this.profile = response.result; },
       error => { if (error.status == 401) { localStorage.removeItem('token'); localStorage.removeItem('id'); this._ns.showSnakBar(Constant.TOKEN_EXPIRE, ''); this._router.navigate(['/login']); } else this._ns.showSnakBar(Constant.SERVER_ERROR, '') })
   }
 
+  /**
+   * @author swarup
+   * 
+   * @return suggetsted people list object
+   */
   getSuggetions() {
     this._as.getRequest(APIEndpoints.SUGGETIONS + this.userId + '/peoples/0/6').subscribe(
       response => { if (response.status == 200) this.peopleList = response.result; },
       error => { if (error.status == 401) { localStorage.removeItem('token'); localStorage.removeItem('id'); this._ns.showSnakBar(Constant.TOKEN_EXPIRE, ''); this._router.navigate(['/login']); } else this._ns.showSnakBar(Constant.SERVER_ERROR, ''); });
   }
 
+  /**
+   * @author swarup
+   * 
+   * 
+   * @param followingUser 
+   * @param people 
+   * 
+   * @return object
+   */
   followUser(followingUser, people) {
     const url = APIEndpoints.FOLLOW + followingUser + "/follow/" + this.userId;
     this._as.postRequest(url, "").subscribe(
@@ -148,6 +303,14 @@ export class DashBoardComponent implements OnInit, AfterViewChecked {
       error => { if (error.status == 401) { localStorage.removeItem('token'); localStorage.removeItem('id'); this._ns.showSnakBar(Constant.TOKEN_EXPIRE, ''); this._router.navigate(['/login']); } else this._ns.showSnakBar(Constant.SERVER_ERROR, '') });
   }
 
+  /**
+   * @author swarup
+   * 
+   * @param followingUserId 
+   * @param people 
+   * 
+   * @return object
+   */
   unFollowUser(followingUserId, people) {
     const url = APIEndpoints.FOLLOW + followingUserId + "/unFollow/" + this.userId;
     this._as.putRequest(url, null).subscribe(
@@ -155,14 +318,44 @@ export class DashBoardComponent implements OnInit, AfterViewChecked {
       error => { if (error.status == 401) { localStorage.removeItem('token'); localStorage.removeItem('id'); this._ns.showSnakBar(Constant.TOKEN_EXPIRE, ''); this._router.navigate(['/login']); } else this._ns.showSnakBar(Constant.SERVER_ERROR, ''); });
   }
 
+  /**
+   * @author swarup
+   * 
+   * @purpose call when page scroll to end
+   */
   onScroll() {
     this.cmtText = '';
     this.pageNo++;
-    this._as.getRequest(APIEndpoints.UPLOAD_POST + this.userId + '/feeds/' + this.pageNo).subscribe(
-      data => { if (data.status == 200) this.posts = this.posts.concat(data.result); console.log(data.result) },
-      error => { if (error.status == 401) { localStorage.removeItem('token'); localStorage.removeItem('id'); this._ns.showSnakBar(Constant.TOKEN_EXPIRE, ''); this._router.navigate(['/login']); } else this._ns.showSnakBar(Constant.SERVER_ERROR, ''); });
+    if (this.form.get('checkArray').value.length == 0) {
+      this._as.getRequest(APIEndpoints.UPLOAD_POST + this.userId + '/feeds/' + this.pageNo).subscribe(
+        data => { if (data.status == 200) this.posts = this.posts.concat(data.result);  },
+        error => { if (error.status == 401) { localStorage.removeItem('token'); localStorage.removeItem('id'); this._ns.showSnakBar(Constant.TOKEN_EXPIRE, ''); this._router.navigate(['/login']); } else this._ns.showSnakBar(Constant.SERVER_ERROR, ''); });
+    } else {
+      this._as.getRequest(APIEndpoints.POST_LIST_BY_TYPE + this.userId + '/bySpec/'+ this.pageNo +'?specList='+ this.form.get('checkArray').value.toString()).subscribe(
+        data => { if (data.status == 200) this.posts = this.posts.concat(data.result);  },
+        error => { if (error.status == 401) { localStorage.removeItem('token'); localStorage.removeItem('id'); this._ns.showSnakBar(Constant.TOKEN_EXPIRE, ''); this._router.navigate(['/login']); } else this._ns.showSnakBar(Constant.SERVER_ERROR, ''); });
+     
+      // console.log(this.form.get('checkArray').value.toString())
+    }
+  }/**
+   * @author swarup
 
+   * @param typeIdlist 
+   */
+  getFeedsByType(typeIdlist: string) {
+    this._as.getRequest(APIEndpoints.POST_LIST_BY_TYPE + this.userId + '/bySpec/0?specList='+typeIdlist).subscribe(
+      data => { if (data.status == 200) this.posts = data.result; },
+      error => { if (error.status == 401) this._ns.showSnakBar(Constant.TOKEN_EXPIRE, ''); else this._ns.showSnakBar(Constant.SERVER_ERROR, ''); });
   }
+  /**
+   * @author swarup
+   * 
+   * @purpose delete comment
+   * 
+   * @param comment 
+   * @param commentList 
+   * @param i 
+   */
   deleteComment(comment, commentList, i) {
     const dialogRef = this.dialog.open(ConfirmDialogComponent, {
       width: '250px',
@@ -183,6 +376,18 @@ export class DashBoardComponent implements OnInit, AfterViewChecked {
 
     });
   }
+
+  /**
+   * 
+   * @param replay 
+   * @param replayList 
+   * @param j 
+   * 
+   * 
+   * @author swarup
+   * 
+   * @purpose delete comment
+   */
   deleteReComment(replay, replayList, j) {
     const dialogRef = this.dialog.open(ConfirmDialogComponent, {
       width: '250px',
@@ -205,6 +410,16 @@ export class DashBoardComponent implements OnInit, AfterViewChecked {
 
   }
 
+  /**
+   * 
+   * @param date
+   * 
+   *  @author Swarup
+   * 
+   * @purpose give time differnces
+   * 
+   * @returns date
+   */
   timeDifference(date) {
     var myDate = new Date(date);
     var difference = new Date().getTime() - myDate.getTime();
@@ -228,7 +443,57 @@ export class DashBoardComponent implements OnInit, AfterViewChecked {
     } else if (daysDifference == 0 && hoursDifference != 0) {
       return hoursDifference + " hr"
     } else {
-      return this.monthNames[myDate.getUTCMonth()] +" "+ myDate.getDate() +" "+ myDate.getFullYear();
+      return this.monthNames[myDate.getUTCMonth()] + " " + myDate.getDate() + " " + myDate.getFullYear();
     }
   }
+
+  vid = document.getElementsByTagName('video');
+
+  /***
+   * @author Swarup
+   * 
+   * @purpose play video on display
+   */
+  // play the perticular video that visible to scrol position
+  checkScroll() {
+    $('video').each(function () {
+      if ($(this).is(":in-viewport")) {
+        $(this)[0].play();
+      } else {
+        $(this)[0].pause();
+      }
+    })
+
+  }
+
+
+  /**
+    * @author Swarup Bhol
+    * 
+    * @purpose get all specialization
+    * 
+    * @returns void
+    */
+  getAllSpecialization() {
+    this._as.getRequest(APIEndpoints.ALL_SPECIALIZATION).subscribe(
+      response => { if (response.status == 200 && response.message == 'Success') this.dropdownList = response.result; },
+      error => { this._ns.showSnakBar(Constant.SERVER_ERROR, "") })
+  }
+  /**
+   * @author Swarup
+   * 
+   * @purpose get specialization by user
+   * 
+   * @returns String array
+   */
+  getUserSpecialization() {
+    this._as.getRequest(APIEndpoints.SPECIALIZATION_BY_USER + this.userId).subscribe(
+      response => { if (response.status == 200 && response.message == 'Success') this.selectedItems = response.result; },
+      error => { this._ns.showSnakBar(Constant.SERVER_ERROR, "") })
+  }
+  onItemSelect(item: any) { }
+  onSelectAll(items: any) {}
+
+
+
 }

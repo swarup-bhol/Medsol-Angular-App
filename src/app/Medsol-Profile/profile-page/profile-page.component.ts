@@ -1,4 +1,4 @@
-import { Component, OnInit, Renderer2 } from '@angular/core';
+import { Component, OnInit, Renderer2, ChangeDetectorRef } from '@angular/core';
 import { ActivatedRoute, Router, Scroll } from '@angular/router';
 import { APIEndpoints } from 'src/app/Constants/APIEndpoints';
 import { APIServiceService } from 'src/app/Medsol-Services/apiservice.service';
@@ -7,6 +7,8 @@ import { Constant } from 'src/app/Constants/Constant';
 import { ConfirmDialogComponent } from 'src/app/Medsol-Common/confirm-dialog/confirm-dialog.component';
 import { MatDialog } from '@angular/material';
 import { EditPostComponent } from 'src/app/Medsol-Dashboard/edit-post/edit-post.component';
+import * as $ from 'jquery';
+import 'is-in-viewport';
 
 @Component({
   selector: 'app-profile-page',
@@ -28,6 +30,7 @@ export class ProfilePageComponent implements OnInit {
   postId: number;
 
   constructor(
+    private cdRef: ChangeDetectorRef,
     private _route: ActivatedRoute,
     private _as: APIServiceService,
     private _ns: NotificationService,
@@ -45,6 +48,11 @@ export class ProfilePageComponent implements OnInit {
     this.getUploadedPosts();
   }
 
+  ngAfterViewChecked(): void {
+    this.cdRef.detectChanges();
+    window.addEventListener('scroll', this.checkScroll, false);
+    window.addEventListener('resize', this.checkScroll, false);
+  }
   getSuggetions() {
     this._as.getRequest(APIEndpoints.SUGGETIONS + this.userId + '/peoples/0/6').subscribe(
       response => { if (response.status == 200) this.peoples = response.result; },
@@ -103,6 +111,33 @@ export class ProfilePageComponent implements OnInit {
       data => { if (data == 200) { this.posts.find(item => item.post.postId == postId).like = false; } },
       error => { if (error.status == 401) this._ns.showSnakBar(Constant.TOKEN_EXPIRE, ''); else this._ns.showSnakBar(Constant.SERVER_ERROR, '') });
   }
+  clickCommentLike(postIndex, commentIndex, replayCommentIndex, commentId, type) {
+    if (type == 'comment') {
+      this.posts[postIndex].commentLIst[commentIndex].like = true;
+      this.posts[postIndex].commentLIst[commentIndex].likeCount += 1;
+    }
+    if (type == 'replay') {
+      this.posts[postIndex].commentLIst[commentIndex].replays[replayCommentIndex].like = true;
+      this.posts[postIndex].commentLIst[commentIndex].replays[replayCommentIndex].likeCount += 1;
+    }
+    console.log(commentId)
+    this._as.postRequest(APIEndpoints.COMMENT_LIKE + commentId + "/" + this.userId, null).subscribe(
+      data => { if (data == 200) { } },
+      error => { if (error.status == 401) this._ns.showSnakBar(Constant.TOKEN_EXPIRE, ''); else this._ns.showSnakBar(Constant.SERVER_ERROR, '') });
+  }
+  clickCommentUnLike(postIndex, commentIndex, replayCommentIndex, commentId, type) {
+    if (type == 'comment') {
+      this.posts[postIndex].commentLIst[commentIndex].like = false;
+      this.posts[postIndex].commentLIst[commentIndex].likeCount -= 1;
+    }
+    if (type == 'replay') {
+      this.posts[postIndex].commentLIst[commentIndex].replays[replayCommentIndex].like = false;
+      this.posts[postIndex].commentLIst[commentIndex].replays[replayCommentIndex].likeCount -= 1;
+    }
+    this._as.putRequest(APIEndpoints.COMMENT_UNLIKE + commentId + "/" + this.userId, null).subscribe(
+      data => { if (data == 200) { } },
+      error => { if (error.status == 401) this._ns.showSnakBar(Constant.TOKEN_EXPIRE, ''); else this._ns.showSnakBar(Constant.SERVER_ERROR, '') });
+  }
 
   isFollowing(userId: string, currentUser: string) {
     this._as.getRequest(APIEndpoints.END_POINT + "/user/" + currentUser + "/isFollow/" + userId).subscribe(
@@ -111,12 +146,14 @@ export class ProfilePageComponent implements OnInit {
   }
 
 
-  deletePost(post, i) {
+  deletePost(postList ,post, i) {
     const dialogRef = this.dialog.open(ConfirmDialogComponent, { width: '250px', data: { message: 'Ae you sure want to delete  ?', title: 'Delete Post' } });
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
         this._as.deleteRequest(APIEndpoints.DELETE_POST + post.postId).subscribe(
-          data => { if (data.status == 200) { this.posts.splice(i); this._ns.showSnakBar(Constant.DELETED_SUCCESSFULLY, ''); } },
+          data => { if (data.status == 200) { 
+            postList.splice(i);
+             this._ns.showSnakBar(Constant.DELETED_SUCCESSFULLY, ''); } },
           error => { if (error.status == 401) this._ns.showSnakBar(Constant.TOKEN_EXPIRE, ''); else this._ns.showSnakBar(Constant.SERVER_ERROR, '') });
       }
 
@@ -146,4 +183,16 @@ export class ProfilePageComponent implements OnInit {
     });
   }
 
+  vid = document.getElementsByTagName('video');
+
+ // play the perticular video that visible to scrol position
+  checkScroll() {
+    $('video').each(function(){
+      if ($(this).is(":in-viewport")) {
+          $(this)[0].play();
+      } else {
+          $(this)[0].pause();
+      }
+  })
+}
 }

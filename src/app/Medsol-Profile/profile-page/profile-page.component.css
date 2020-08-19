@@ -106,3 +106,12 @@
     padding-top: 0px;
     padding-bottom: 0px;
 }
+
+.cmt-like-div {
+    margin-left: 3%;
+    cursor: pointer;
+}
+.cmt-replay-div{
+    margin-left: 2%;
+    cursor: pointer;
+}
