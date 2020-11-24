@@ -1,4 +1,9 @@
 <div class="box shadow-sm border rounded bg-white mb-3 osahan-share-post">
+     <!-- Progress Bar -->
+     <div class="progress form-group" *ngIf="progress > 0">
+        <div class="progress-bar progress-bar-striped bg-success" role="progressbar" [style.width.%]="progress">
+        </div>
+    </div>
     <ul class="nav nav-justified border-bottom osahan-line-tab" id="myTab" role="tablist">
         <li class="nav-item">
             <a class="nav-link active" id="home-tab" data-toggle="tab" href="#home" role="tab" aria-controls="home"

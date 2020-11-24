@@ -9,6 +9,7 @@ import { MatDialog } from '@angular/material';
 import { EditPostComponent } from 'src/app/Medsol-Dashboard/edit-post/edit-post.component';
 import * as $ from 'jquery';
 import 'is-in-viewport';
+import { LogoutService } from 'src/app/Medsol-Services/Common/logout.service';
 
 @Component({
   selector: 'app-profile-page',
@@ -36,7 +37,8 @@ export class ProfilePageComponent implements OnInit {
     private _ns: NotificationService,
     private _router: Router,
     private _renderer: Renderer2,
-    public dialog: MatDialog
+    public dialog: MatDialog,
+    private _ls: LogoutService
   ) { }
 
   ngOnInit() {
@@ -56,33 +58,33 @@ export class ProfilePageComponent implements OnInit {
   getSuggetions() {
     this._as.getRequest(APIEndpoints.SUGGETIONS + this.userId + '/peoples/0/6').subscribe(
       response => { if (response.status == 200) this.peoples = response.result; },
-      error => { if (error.status == 401) { localStorage.removeItem('token'); localStorage.removeItem('id'); this._ns.showSnakBar(Constant.TOKEN_EXPIRE, ''); this._router.navigate(['/login']); } else this._ns.showSnakBar(Constant.SERVER_ERROR, ''); });
+      error => { if (error.status == 401) {  this._ns.showSnakBar(Constant.TOKEN_EXPIRE, '');this._ls.logout() } else this._ns.showSnakBar(Constant.SERVER_ERROR, ''); });
   }
 
   getProfileInfo() {
     this._as.getRequest(APIEndpoints.PROFILE + this.userId).subscribe(
       response => { if (response.status == 200) this.profile = response.result; console.log(response) },
-      error => { if (error.status == 401) { localStorage.removeItem('token'); localStorage.removeItem('id'); this._ns.showSnakBar(Constant.TOKEN_EXPIRE, ''); this._router.navigate(['/login']); } else this._ns.showSnakBar(Constant.SERVER_ERROR, ''); });
+      error => { if (error.status == 401) { this._ns.showSnakBar(Constant.TOKEN_EXPIRE, '');this._ls.logout() } else this._ns.showSnakBar(Constant.SERVER_ERROR, ''); });
   }
 
   getUploadedPosts() {
     this._as.getRequest(APIEndpoints.GET_UPLOAD_POST + this.userId + "/post/0").subscribe(
       data => { if (data.status == 200) { this.posts = data.result; } console.log(data) },
-      error => { if (error.status == 401) { localStorage.removeItem('token'); localStorage.removeItem('id'); this._ns.showSnakBar(Constant.TOKEN_EXPIRE, ''); this._router.navigate(['/login']); } else this._ns.showSnakBar(Constant.SERVER_ERROR, ''); });
+      error => { if (error.status == 401) {  this._ns.showSnakBar(Constant.TOKEN_EXPIRE, '');this._ls.logout() } else this._ns.showSnakBar(Constant.SERVER_ERROR, ''); });
   }
 
   followUser(followingUser, people) {
     const url = APIEndpoints.FOLLOW + followingUser + "/follow/" + this.userId;
     this._as.postRequest(url, "").subscribe(
       data => { if (data.status == 200) people.following = data.result.following },
-      error => { if (error.status == 401) { localStorage.removeItem('token'); localStorage.removeItem('id'); this._ns.showSnakBar(Constant.TOKEN_EXPIRE, ''); this._router.navigate(['/login']); } else this._ns.showSnakBar(Constant.SERVER_ERROR, '') });
+      error => { if (error.status == 401) {  this._ns.showSnakBar(Constant.TOKEN_EXPIRE, '');this._ls.logout() } else this._ns.showSnakBar(Constant.SERVER_ERROR, '') });
   }
 
   unFollowUser(followingUserId, people) {
     const url = APIEndpoints.FOLLOW + followingUserId + "/unFollow/" + this.userId;
     this._as.putRequest(url, null).subscribe(
       data => { people.following = data.result.following; },
-      error => { if (error.status == 401) { localStorage.removeItem('token'); localStorage.removeItem('id'); this._ns.showSnakBar(Constant.TOKEN_EXPIRE, ''); this._router.navigate(['/login']); } else this._ns.showSnakBar(Constant.SERVER_ERROR, ''); });
+      error => { if (error.status == 401) { this._ns.showSnakBar(Constant.TOKEN_EXPIRE, ''); this._ls.logout() } else this._ns.showSnakBar(Constant.SERVER_ERROR, ''); });
   }
 
   clickComment(event, postId, message, i) {
@@ -101,7 +103,7 @@ export class ProfilePageComponent implements OnInit {
     this.posts[i].likeCount = this.posts[i].likeCount + 1;
     this._as.postRequest(APIEndpoints.CLICK_LIKE + postId + '/' + this.userId, null).subscribe(
       data => { },
-      error => { if (error.status == 401) { this._ns.showSnakBar(Constant.TOKEN_EXPIRE, '') } else { this._ns.showSnakBar(Constant.SERVER_ERROR, '') } });
+      error => { if (error.status == 401) { this._ns.showSnakBar(Constant.TOKEN_EXPIRE, ''); this._ls.logout() } else { this._ns.showSnakBar(Constant.SERVER_ERROR, '') } });
   }
 
   clickUnLike(postId, i) {
@@ -109,7 +111,7 @@ export class ProfilePageComponent implements OnInit {
     this.posts[i].likeCount = this.posts[i].likeCount - 1;
     this._as.putRequest(APIEndpoints.CLICK_UN_LIKE + postId + '/' + this.userId, null).subscribe(
       data => { if (data == 200) { this.posts.find(item => item.post.postId == postId).like = false; } },
-      error => { if (error.status == 401) this._ns.showSnakBar(Constant.TOKEN_EXPIRE, ''); else this._ns.showSnakBar(Constant.SERVER_ERROR, '') });
+      error => { if (error.status == 401) {this._ns.showSnakBar(Constant.TOKEN_EXPIRE, ''); this._ls.logout()}else this._ns.showSnakBar(Constant.SERVER_ERROR, '') });
   }
   clickCommentLike(postIndex, commentIndex, replayCommentIndex, commentId, type) {
     if (type == 'comment') {
@@ -123,7 +125,7 @@ export class ProfilePageComponent implements OnInit {
     console.log(commentId)
     this._as.postRequest(APIEndpoints.COMMENT_LIKE + commentId + "/" + this.userId, null).subscribe(
       data => { if (data == 200) { } },
-      error => { if (error.status == 401) this._ns.showSnakBar(Constant.TOKEN_EXPIRE, ''); else this._ns.showSnakBar(Constant.SERVER_ERROR, '') });
+      error => { if (error.status == 401) {this._ns.showSnakBar(Constant.TOKEN_EXPIRE, ''); this._ls.logout()} else this._ns.showSnakBar(Constant.SERVER_ERROR, '') });
   }
   clickCommentUnLike(postIndex, commentIndex, replayCommentIndex, commentId, type) {
     if (type == 'comment') {
@@ -136,13 +138,13 @@ export class ProfilePageComponent implements OnInit {
     }
     this._as.putRequest(APIEndpoints.COMMENT_UNLIKE + commentId + "/" + this.userId, null).subscribe(
       data => { if (data == 200) { } },
-      error => { if (error.status == 401) this._ns.showSnakBar(Constant.TOKEN_EXPIRE, ''); else this._ns.showSnakBar(Constant.SERVER_ERROR, '') });
+      error => { if (error.status == 401) {this._ns.showSnakBar(Constant.TOKEN_EXPIRE, ''); this._ls.logout()}else this._ns.showSnakBar(Constant.SERVER_ERROR, '') });
   }
 
   isFollowing(userId: string, currentUser: string) {
     this._as.getRequest(APIEndpoints.END_POINT + "/user/" + currentUser + "/isFollow/" + userId).subscribe(
       data => { if (data.status == 200) this.following = data.result; },
-      error => { if (error.status == 401) this._ns.showSnakBar(Constant.TOKEN_EXPIRE, ''); else this._ns.showSnakBar(Constant.SERVER_ERROR, '') });
+      error => { if (error.status == 401) {this._ns.showSnakBar(Constant.TOKEN_EXPIRE, ''); this._ls.logout()}else this._ns.showSnakBar(Constant.SERVER_ERROR, '') });
   }
 
 
@@ -154,7 +156,7 @@ export class ProfilePageComponent implements OnInit {
           data => { if (data.status == 200) { 
             postList.splice(i);
              this._ns.showSnakBar(Constant.DELETED_SUCCESSFULLY, ''); } },
-          error => { if (error.status == 401) this._ns.showSnakBar(Constant.TOKEN_EXPIRE, ''); else this._ns.showSnakBar(Constant.SERVER_ERROR, '') });
+          error => { if (error.status == 401) { this._ns.showSnakBar(Constant.TOKEN_EXPIRE, ''); this._ls.logout()}else this._ns.showSnakBar(Constant.SERVER_ERROR, '') });
       }
 
     });
@@ -177,7 +179,7 @@ export class ProfilePageComponent implements OnInit {
       if (result) {
         this._as.deleteRequest(APIEndpoints.DELETE_COMMENT + comment.commentId).subscribe(
           data => { if (data.status == 200) { commentList.pop(Comment); this._ns.showSnakBar(Constant.DELETED_SUCCESSFULLY, '') } },
-          error => { if (error.status == 401) this._ns.showSnakBar(Constant.TOKEN_EXPIRE, ''); else this._ns.showSnakBar(Constant.SERVER_ERROR, '') });
+          error => { if (error.status == 401) {this._ns.showSnakBar(Constant.TOKEN_EXPIRE, ''); this._ls.logout()} else this._ns.showSnakBar(Constant.SERVER_ERROR, '') });
       }
 
     });

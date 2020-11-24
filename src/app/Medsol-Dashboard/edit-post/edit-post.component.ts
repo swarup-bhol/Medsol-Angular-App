@@ -4,6 +4,7 @@ import { APIServiceService } from 'src/app/Medsol-Services/apiservice.service';
 import { APIEndpoints } from 'src/app/Constants/APIEndpoints';
 import { NotificationService } from 'src/app/Medsol-Services/Common/notification.service';
 import { Constant } from 'src/app/Constants/Constant';
+import { LogoutService } from './../../Medsol-Services/Common/logout.service';
 
 @Component({
   selector: 'app-edit-post',
@@ -19,7 +20,8 @@ export class EditPostComponent implements OnInit {
   constructor(
     public dialogRef: MatDialogRef<EditPostComponent>, @Inject(MAT_DIALOG_DATA) public post: any,
     private _as:APIServiceService ,
-    private _ns:NotificationService
+    private _ns:NotificationService,
+    private _ls:LogoutService
      ) {
   }
 
@@ -50,7 +52,7 @@ export class EditPostComponent implements OnInit {
     formData.append('content', this.message);
     this._as.putRequest(APIEndpoints.UPDATE_POST + this.post.post.postId, formData).subscribe(
       data => {if (data.status == 200) this._ns.showSnakBar(Constant.UPLOADED_SUCCESSFULLY, '');  this.imageURL = '';  this.message = '';this.dialogRef.close();location.reload() },
-      error => { if (error.status == 401) this._ns.showSnakBar(Constant.TOKEN_EXPIRE, ''); else this._ns.showSnakBar(Constant.SERVER_ERROR, '') });
+      error => { if (error.status == 401) {this._ns.showSnakBar(Constant.TOKEN_EXPIRE, ''); this._ls.logout()} else this._ns.showSnakBar(Constant.SERVER_ERROR, '') });
 
   }
 }

@@ -7,6 +7,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
 import { ConfirmDialogComponent } from 'src/app/Medsol-Common/confirm-dialog/confirm-dialog.component';
 import { MatDialog } from '@angular/material';
+import { LogoutService } from 'src/app/Medsol-Services/Common/logout.service';
 export class Response{
   message: string
   result: Posts
@@ -58,7 +59,8 @@ export class PostNotificationComponent implements OnInit {
     private _router: Router,
     private _route: ActivatedRoute,
     private _http: HttpClient,
-    public dialog: MatDialog
+    public dialog: MatDialog,
+    private _ls: LogoutService
   ) { }
 
   ngOnInit() {
@@ -76,7 +78,7 @@ export class PostNotificationComponent implements OnInit {
   }
   getProfileInfo() {
     this._as.getRequest(APIEndpoints.PROFILE + this.userId).subscribe(response => { if (response.status == 200) this.profile = response.result; console.log(response) },
-      error => { if (error.status == 401) { localStorage.removeItem('token'); localStorage.removeItem('id'); this._ns.showSnakBar(Constant.TOKEN_EXPIRE, ''); this._router.navigate(['/login']); } else this._ns.showSnakBar(Constant.SERVER_ERROR, '') })
+      error => { if (error.status == 401) {  this._ns.showSnakBar(Constant.TOKEN_EXPIRE, ''); this._ls.logout()} else this._ns.showSnakBar(Constant.SERVER_ERROR, '') })
   }
 
   getPostByPostId(postId) {
@@ -84,7 +86,7 @@ export class PostNotificationComponent implements OnInit {
       response => { 
         if (response.status == 200) this.post = response.result; console.log(response)
        },
-      error => { if (error.status == 401) { localStorage.removeItem('token'); localStorage.removeItem('id'); this._ns.showSnakBar(Constant.TOKEN_EXPIRE, ''); this._router.navigate(['/login']); } else this._ns.showSnakBar(Constant.SERVER_ERROR, '') })
+      error => { if (error.status == 401) {  this._ns.showSnakBar(Constant.TOKEN_EXPIRE, ''); this._ls.logout() } else this._ns.showSnakBar(Constant.SERVER_ERROR, '') })
 
   }
 
@@ -150,7 +152,7 @@ export class PostNotificationComponent implements OnInit {
     this.post.likeCount = this.post.likeCount + 1;
     this._as.postRequest(APIEndpoints.CLICK_LIKE + postId + '/' + this.userId, null).subscribe(
       data => { },
-      error => { if (error.status == 401) { this._ns.showSnakBar(Constant.TOKEN_EXPIRE, '') } else { this._ns.showSnakBar(Constant.SERVER_ERROR, '') } });
+      error => { if (error.status == 401) { this._ns.showSnakBar(Constant.TOKEN_EXPIRE, '') ; this._ls.logout()} else { this._ns.showSnakBar(Constant.SERVER_ERROR, '') } });
   }
 
   clickUnLike(postId, i) {
@@ -158,7 +160,7 @@ export class PostNotificationComponent implements OnInit {
     this.post.likeCount = this.post.likeCount - 1;
     this._as.putRequest(APIEndpoints.CLICK_UN_LIKE + postId + '/' + this.userId, null).subscribe(
       data => { if (data == 200) { this.post.find(item => item.post.postId == postId).like = false; } },
-      error => { if (error.status == 401) this._ns.showSnakBar(Constant.TOKEN_EXPIRE, ''); else this._ns.showSnakBar(Constant.SERVER_ERROR, '') });
+      error => { if (error.status == 401) {this._ns.showSnakBar(Constant.TOKEN_EXPIRE, '');this._ls.logout()} else this._ns.showSnakBar(Constant.SERVER_ERROR, '') });
   }
   deleteComment(comment, commentList, i) {
     const dialogRef = this.dialog.open(ConfirmDialogComponent, {
@@ -175,7 +177,7 @@ export class PostNotificationComponent implements OnInit {
               this._ns.showSnakBar(Constant.DELETED_SUCCESSFULLY, '')
             }
           },
-          error => { if (error.status == 401) this._ns.showSnakBar(Constant.TOKEN_EXPIRE, ''); else this._ns.showSnakBar(Constant.SERVER_ERROR, '') });
+          error => { if (error.status == 401) {this._ns.showSnakBar(Constant.TOKEN_EXPIRE, ''); this._ls.logout()} else this._ns.showSnakBar(Constant.SERVER_ERROR, '') });
       }
 
     });
@@ -194,7 +196,7 @@ export class PostNotificationComponent implements OnInit {
               this._ns.showSnakBar(Constant.DELETED_SUCCESSFULLY, '')
             }
           },
-          error => { if (error.status == 401) this._ns.showSnakBar(Constant.TOKEN_EXPIRE, ''); else this._ns.showSnakBar(Constant.SERVER_ERROR, '') });
+          error => { if (error.status == 401) {this._ns.showSnakBar(Constant.TOKEN_EXPIRE, ''); this._ls.logout()}else this._ns.showSnakBar(Constant.SERVER_ERROR, '') });
       }
 
     });

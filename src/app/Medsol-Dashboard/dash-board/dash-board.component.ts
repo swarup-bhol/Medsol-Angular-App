@@ -12,6 +12,8 @@ import * as $ from 'jquery';
 import { IDropdownSettings } from 'ng-multiselect-dropdown';
 import 'is-in-viewport';
 import { FormArray, FormControl, FormGroup, FormBuilder } from '@angular/forms';
+import { LogoutService } from './../../Medsol-Services/Common/logout.service'
+import { SharedVarService } from 'src/app/Medsol-Services/Common/shared-var.service';
 
 @Component({
   selector: 'app-dash-board',
@@ -48,8 +50,10 @@ export class DashBoardComponent implements OnInit, AfterViewChecked {
     private _ps: ProfileService,
     private _router: Router,
     public dialog: MatDialog,
+    private _logoutService : LogoutService,
     private renderer: Renderer2,
-    private elementRef: ElementRef
+    private elementRef: ElementRef,
+    private _bs: SharedVarService
   ) {
     this.form = this.fb.group({
       checkArray: this.fb.array([])
@@ -74,6 +78,12 @@ export class DashBoardComponent implements OnInit, AfterViewChecked {
   ngOnInit() {
 
     this.userId = localStorage.getItem('id');
+    this._bs.uploadPost.subscribe(data=>{
+      if(data != null){
+        this.posts = [...data.result,...this.posts];
+
+      }
+    });
     this.getFeeds();
     this.getProfileInfo();
     this.getSuggetions();
@@ -113,7 +123,7 @@ export class DashBoardComponent implements OnInit, AfterViewChecked {
         data => { 
           if (data.status == 200) this.posts = data.result; },
         error => { 
-          if (error.status == 401) this._ns.showSnakBar(Constant.TOKEN_EXPIRE, ''); else this._ns.showSnakBar(Constant.SERVER_ERROR, ''); });
+          if (error.status == 401) {this._ns.showSnakBar(Constant.TOKEN_EXPIRE, ''); this._logoutService.logout();} else this._ns.showSnakBar(Constant.SERVER_ERROR, ''); });
     } else {
       let i: number = 0;
       checkArray.controls.forEach((item: FormControl) => {
@@ -186,7 +196,7 @@ export class DashBoardComponent implements OnInit, AfterViewChecked {
     this.posts[i].likeCount = this.posts[i].likeCount + 1;
     this._as.postRequest(APIEndpoints.CLICK_LIKE + postId + '/' + this.userId, null).subscribe(
       data => { },
-      error => { if (error.status == 401) { this._ns.showSnakBar(Constant.TOKEN_EXPIRE, '') } else { this._ns.showSnakBar(Constant.SERVER_ERROR, '') } });
+      error => { if (error.status == 401) { this._ns.showSnakBar(Constant.TOKEN_EXPIRE, '');  this._logoutService.logout(); } else { this._ns.showSnakBar(Constant.SERVER_ERROR, '') } });
   }
 
   /**
@@ -202,7 +212,7 @@ export class DashBoardComponent implements OnInit, AfterViewChecked {
     this.posts[i].likeCount = this.posts[i].likeCount - 1;
     this._as.putRequest(APIEndpoints.CLICK_UN_LIKE + postId + '/' + this.userId, null).subscribe(
       data => { if (data == 200) { this.posts.find(item => item.post.postId == postId).like = false; } },
-      error => { if (error.status == 401) this._ns.showSnakBar(Constant.TOKEN_EXPIRE, ''); else this._ns.showSnakBar(Constant.SERVER_ERROR, '') });
+      error => { if (error.status == 401) {this._ns.showSnakBar(Constant.TOKEN_EXPIRE, '');  this._logoutService.logout();}else this._ns.showSnakBar(Constant.SERVER_ERROR, '') });
   }
 
   /**
@@ -227,7 +237,7 @@ export class DashBoardComponent implements OnInit, AfterViewChecked {
     }
     this._as.postRequest(APIEndpoints.COMMENT_LIKE + commentId + "/" + this.userId, null).subscribe(
       data => { if (data == 200) { } },
-      error => { if (error.status == 401) this._ns.showSnakBar(Constant.TOKEN_EXPIRE, ''); else this._ns.showSnakBar(Constant.SERVER_ERROR, '') });
+      error => { if (error.status == 401) {this._ns.showSnakBar(Constant.TOKEN_EXPIRE, '');  this._logoutService.logout();} else this._ns.showSnakBar(Constant.SERVER_ERROR, '') });
   }
   /**
    * @author swarup
@@ -251,7 +261,7 @@ export class DashBoardComponent implements OnInit, AfterViewChecked {
     }
     this._as.putRequest(APIEndpoints.COMMENT_UNLIKE + commentId + "/" + this.userId, null).subscribe(
       data => { if (data == 200) { } },
-      error => { if (error.status == 401) this._ns.showSnakBar(Constant.TOKEN_EXPIRE, ''); else this._ns.showSnakBar(Constant.SERVER_ERROR, '') });
+      error => { if (error.status == 401) {this._ns.showSnakBar(Constant.TOKEN_EXPIRE, '');  this._logoutService.logout();} else this._ns.showSnakBar(Constant.SERVER_ERROR, '') });
   }
 
   /**
@@ -262,8 +272,8 @@ export class DashBoardComponent implements OnInit, AfterViewChecked {
    */
   getFeeds() {
     this._as.getRequest(APIEndpoints.UPLOAD_POST + this.userId + '/feeds/0').subscribe(
-      data => { if (data.status == 200) this.posts = data.result; },
-      error => { if (error.status == 401) this._ns.showSnakBar(Constant.TOKEN_EXPIRE, ''); else this._ns.showSnakBar(Constant.SERVER_ERROR, ''); });
+      data => { if (data.status == 200) this.posts = data.result;  console.log(data.result)},
+      error => { if (error.status == 401) {this._ns.showSnakBar(Constant.TOKEN_EXPIRE, '');  this._logoutService.logout();} else this._ns.showSnakBar(Constant.SERVER_ERROR, ''); });
   }
 
   /**
@@ -273,7 +283,7 @@ export class DashBoardComponent implements OnInit, AfterViewChecked {
    */
   getProfileInfo() {
     this._as.getRequest(APIEndpoints.PROFILE + this.userId).subscribe(response => { if (response.status == 200) this.profile = response.result; },
-      error => { if (error.status == 401) { localStorage.removeItem('token'); localStorage.removeItem('id'); this._ns.showSnakBar(Constant.TOKEN_EXPIRE, ''); this._router.navigate(['/login']); } else this._ns.showSnakBar(Constant.SERVER_ERROR, '') })
+      error => { if (error.status == 401) { this._ns.showSnakBar(Constant.TOKEN_EXPIRE, ''); this._logoutService.logout();} else this._ns.showSnakBar(Constant.SERVER_ERROR, '') })
   }
 
   /**
@@ -284,7 +294,7 @@ export class DashBoardComponent implements OnInit, AfterViewChecked {
   getSuggetions() {
     this._as.getRequest(APIEndpoints.SUGGETIONS + this.userId + '/peoples/0/6').subscribe(
       response => { if (response.status == 200) this.peopleList = response.result; },
-      error => { if (error.status == 401) { localStorage.removeItem('token'); localStorage.removeItem('id'); this._ns.showSnakBar(Constant.TOKEN_EXPIRE, ''); this._router.navigate(['/login']); } else this._ns.showSnakBar(Constant.SERVER_ERROR, ''); });
+      error => { if (error.status == 401) { this._ns.showSnakBar(Constant.TOKEN_EXPIRE, ''); this._logoutService.logout(); } else this._ns.showSnakBar(Constant.SERVER_ERROR, ''); });
   }
 
   /**
@@ -300,7 +310,7 @@ export class DashBoardComponent implements OnInit, AfterViewChecked {
     const url = APIEndpoints.FOLLOW + followingUser + "/follow/" + this.userId;
     this._as.postRequest(url, "").subscribe(
       data => { if (data.status == 200) people.following = data.result.following },
-      error => { if (error.status == 401) { localStorage.removeItem('token'); localStorage.removeItem('id'); this._ns.showSnakBar(Constant.TOKEN_EXPIRE, ''); this._router.navigate(['/login']); } else this._ns.showSnakBar(Constant.SERVER_ERROR, '') });
+      error => { if (error.status == 401) { this._ns.showSnakBar(Constant.TOKEN_EXPIRE, ''); this._logoutService.logout(); } else this._ns.showSnakBar(Constant.SERVER_ERROR, '') });
   }
 
   /**
@@ -315,7 +325,7 @@ export class DashBoardComponent implements OnInit, AfterViewChecked {
     const url = APIEndpoints.FOLLOW + followingUserId + "/unFollow/" + this.userId;
     this._as.putRequest(url, null).subscribe(
       data => { people.following = data.result.following; },
-      error => { if (error.status == 401) { localStorage.removeItem('token'); localStorage.removeItem('id'); this._ns.showSnakBar(Constant.TOKEN_EXPIRE, ''); this._router.navigate(['/login']); } else this._ns.showSnakBar(Constant.SERVER_ERROR, ''); });
+      error => { if (error.status == 401) { this._ns.showSnakBar(Constant.TOKEN_EXPIRE, '');  this._logoutService.logout(); } else this._ns.showSnakBar(Constant.SERVER_ERROR, ''); });
   }
 
   /**
@@ -329,11 +339,11 @@ export class DashBoardComponent implements OnInit, AfterViewChecked {
     if (this.form.get('checkArray').value.length == 0) {
       this._as.getRequest(APIEndpoints.UPLOAD_POST + this.userId + '/feeds/' + this.pageNo).subscribe(
         data => { if (data.status == 200) this.posts = this.posts.concat(data.result);  },
-        error => { if (error.status == 401) { localStorage.removeItem('token'); localStorage.removeItem('id'); this._ns.showSnakBar(Constant.TOKEN_EXPIRE, ''); this._router.navigate(['/login']); } else this._ns.showSnakBar(Constant.SERVER_ERROR, ''); });
+        error => { if (error.status == 401) {  this._ns.showSnakBar(Constant.TOKEN_EXPIRE, ''); this._logoutService.logout(); } else this._ns.showSnakBar(Constant.SERVER_ERROR, ''); });
     } else {
       this._as.getRequest(APIEndpoints.POST_LIST_BY_TYPE + this.userId + '/bySpec/'+ this.pageNo +'?specList='+ this.form.get('checkArray').value.toString()).subscribe(
         data => { if (data.status == 200) this.posts = this.posts.concat(data.result);  },
-        error => { if (error.status == 401) { localStorage.removeItem('token'); localStorage.removeItem('id'); this._ns.showSnakBar(Constant.TOKEN_EXPIRE, ''); this._router.navigate(['/login']); } else this._ns.showSnakBar(Constant.SERVER_ERROR, ''); });
+        error => { if (error.status == 401) { this._ns.showSnakBar(Constant.TOKEN_EXPIRE, ''); this._logoutService.logout();} else this._ns.showSnakBar(Constant.SERVER_ERROR, ''); });
      
       // console.log(this.form.get('checkArray').value.toString())
     }
@@ -345,7 +355,7 @@ export class DashBoardComponent implements OnInit, AfterViewChecked {
   getFeedsByType(typeIdlist: string) {
     this._as.getRequest(APIEndpoints.POST_LIST_BY_TYPE + this.userId + '/bySpec/0?specList='+typeIdlist).subscribe(
       data => { if (data.status == 200) this.posts = data.result; },
-      error => { if (error.status == 401) this._ns.showSnakBar(Constant.TOKEN_EXPIRE, ''); else this._ns.showSnakBar(Constant.SERVER_ERROR, ''); });
+      error => { if (error.status == 401) {this._ns.showSnakBar(Constant.TOKEN_EXPIRE, '');  this._logoutService.logout();} else this._ns.showSnakBar(Constant.SERVER_ERROR, ''); });
   }
   /**
    * @author swarup
@@ -371,7 +381,7 @@ export class DashBoardComponent implements OnInit, AfterViewChecked {
               this._ns.showSnakBar(Constant.DELETED_SUCCESSFULLY, '')
             }
           },
-          error => { if (error.status == 401) this._ns.showSnakBar(Constant.TOKEN_EXPIRE, ''); else this._ns.showSnakBar(Constant.SERVER_ERROR, '') });
+          error => { if (error.status == 401) {this._ns.showSnakBar(Constant.TOKEN_EXPIRE, '');  this._logoutService.logout();}else this._ns.showSnakBar(Constant.SERVER_ERROR, '') });
       }
 
     });
@@ -402,7 +412,7 @@ export class DashBoardComponent implements OnInit, AfterViewChecked {
               this._ns.showSnakBar(Constant.DELETED_SUCCESSFULLY, '')
             }
           },
-          error => { if (error.status == 401) this._ns.showSnakBar(Constant.TOKEN_EXPIRE, ''); else this._ns.showSnakBar(Constant.SERVER_ERROR, '') });
+          error => { if (error.status == 401) {this._ns.showSnakBar(Constant.TOKEN_EXPIRE, '');  this._logoutService.logout();} else this._ns.showSnakBar(Constant.SERVER_ERROR, '') });
       }
 
     });

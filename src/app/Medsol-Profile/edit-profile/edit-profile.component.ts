@@ -5,6 +5,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { NotificationService } from 'src/app/Medsol-Services/Common/notification.service';
 import { APIEndpoints } from 'src/app/Constants/APIEndpoints';
 import { Constant } from 'src/app/Constants/Constant';
+import { LogoutService } from 'src/app/Medsol-Services/Common/logout.service';
 
 @Component({
   selector: 'app-edit-profile',
@@ -32,7 +33,8 @@ export class EditProfileComponent implements OnInit {
     private _as: APIServiceService,
     private _route: ActivatedRoute,
     private _ns: NotificationService,
-    private _router: Router
+    private _router: Router,
+    private _ls: LogoutService
   ) { }
 
 
@@ -68,14 +70,14 @@ export class EditProfileComponent implements OnInit {
 
   getProfileInfo() {
     this._as.getRequest(APIEndpoints.PROFILE + this.userId).subscribe(response => { if (response.status == 200) { console.log(response.result); this.setField(response.result) } },
-      error => {if (error.status == 401) { localStorage.removeItem('token');  localStorage.removeItem('id'); this._ns.showSnakBar(Constant.TOKEN_EXPIRE, '');  this._router.navigate(['/login']); }  else this._ns.showSnakBar(Constant.SERVER_ERROR, '')})
+      error => {if (error.status == 401) {this._ns.showSnakBar(Constant.TOKEN_EXPIRE, ''); this._ls.logout() }  else this._ns.showSnakBar(Constant.SERVER_ERROR, '')})
   }
   updateProfile() {
     this.isSubmited = true;
     if (this.profileForm.invalid) return;
     this._as.putRequest(APIEndpoints.UPDATE_PROFILE_DETAILS+this.userId, this.profileForm.value).subscribe(
       response => {if (response.status == 200) { this._ns.showSnakBar(Constant.UPDATED, '')}},
-      error => {if (error.status == 401) { localStorage.removeItem('token');  localStorage.removeItem('id'); this._ns.showSnakBar(Constant.TOKEN_EXPIRE, '');  this._router.navigate(['/login']); }  else this._ns.showSnakBar(Constant.SERVER_ERROR, '')})
+      error => {if (error.status == 401) {  this._ns.showSnakBar(Constant.TOKEN_EXPIRE, '');  this._ls.logout() }  else this._ns.showSnakBar(Constant.SERVER_ERROR, '')})
 
   }
 
