@@ -77,9 +77,10 @@ export class DashBoardComponent implements OnInit, AfterViewChecked {
 
   ngOnInit() {
 
-    this.userId = localStorage.getItem('id');
+    this._bs.userIdExist.subscribe(result => this.userId = result);
     this._bs.uploadPost.subscribe(data=>{
       if(data != null){
+        console.log("check")
         this.posts = [...data.result,...this.posts];
 
       }

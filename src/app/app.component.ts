@@ -17,7 +17,7 @@ import { SharedVarService } from './Medsol-Services/Common/shared-var.service';
 })
 export class AppComponent implements OnInit , AfterViewInit{
   subscription: Subscription;
-  userId = "1";
+  userId = null;
   search = "";
   title = 'Medsol';
   profile: any;
@@ -96,7 +96,7 @@ export class AppComponent implements OnInit , AfterViewInit{
   getOldNotification() {
     this._as.getRequest(APIEndpoints.GET_OLD_NOTIFICATION + this.userId + "/" + this.pageNo).subscribe(
       response => { if (response.status == 200) { this.notifications = response.result; this.pageNo++;
-         console.log(response.result) } },
+         console.log("sadd"+response.result) } },
       error => { if (error.status == 401) {  this._ns.showSnakBar(Constant.TOKEN_EXPIRE, ''); this._logoutService.logout() } else this._ns.showSnakBar(Constant.SERVER_ERROR, ''); });
   }
   getMoreNotification() {

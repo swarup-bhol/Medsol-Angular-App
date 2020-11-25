@@ -10,6 +10,7 @@ import { EditPostComponent } from 'src/app/Medsol-Dashboard/edit-post/edit-post.
 import * as $ from 'jquery';
 import 'is-in-viewport';
 import { LogoutService } from 'src/app/Medsol-Services/Common/logout.service';
+import { SharedVarService } from 'src/app/Medsol-Services/Common/shared-var.service';
 
 @Component({
   selector: 'app-profile-page',
@@ -38,12 +39,20 @@ export class ProfilePageComponent implements OnInit {
     private _router: Router,
     private _renderer: Renderer2,
     public dialog: MatDialog,
-    private _ls: LogoutService
+    private _ls: LogoutService,
+    private _bs: SharedVarService
   ) { }
 
   ngOnInit() {
     this.userId = this._route.snapshot.paramMap.get("id");
     this.currentUser = localStorage.getItem('id');
+    this._bs.uploadPost.subscribe(data=>{
+      if(data != null){
+        console.log("check")
+        this.posts = [...data.result,...this.posts];
+
+      }
+    });
     this.isFollowing(this.userId, this.currentUser);
     this.getSuggetions();
     this.getProfileInfo();

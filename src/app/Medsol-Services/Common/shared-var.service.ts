@@ -6,7 +6,7 @@ import { BehaviorSubject } from 'rxjs';
 })
 export class SharedVarService {
   userId = null;
-  post :any[any] = [];
+  post :any = null;
   constructor() { }
 
   

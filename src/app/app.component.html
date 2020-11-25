@@ -54,12 +54,25 @@
                aria-expanded="false">
                <i class="fa fa-bell" aria-hidden="true"></i>
                <!-- Counter - Alerts -->
-               <span class="badge badge-info badge-counter"
-                  *ngIf="notificationCount!= 0">{{notificationCount}}</span>
+               <span class="badge badge-info badge-counter" *ngIf="notificationCount!= 0">{{notificationCount}}</span>
             </a>
             <!-- Dropdown - Alerts -->
             <div class="dropdown-list dropdown-menu dropdown-menu-right shadow-sm coment-div">
+               <div *ngFor="let notification of notifications, let i=index">
+                  <!-- <div [routerLink]="['/post',notification?.postId]">
+                     <div class="row notification-list">
+                        <div class="col-sm-9 col-lg-9 col-md-9"><strong>{{notification.userName}} </strong> <strong
+                              *ngIf="notification.recordCount-1 != 0">and {{notification.recordCount-1}}
+                              other<span></span></strong>
+                           {{notification.notificatonType}} your <strong>Post.</strong></div>
+                        <div class="col-sm-3 col-lg-3 col-md-3"><img
+                              src="http://localhost:8080/api/medsol/posts/img/{{notification.postId}}" height="30px"
+                              width="30px" alt="image"></div>
+                     </div>
+                  </div> -->
+               </div>
             </div>
+
          </li>
          <!-- Nav Item - User Information -->
          <li class="nav-item dropdown no-arrow ml-1 osahan-profile-dropdown">
